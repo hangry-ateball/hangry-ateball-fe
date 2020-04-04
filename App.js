@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Form from './Components/Form/Form'
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
-export default function App() {
+export default App = () => {
+  const [showForm, setShowForm] = useState(false)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -9,7 +11,8 @@ export default function App() {
       </View>
       <Image style={styles.eightBall} source={require('./assets/ate-ball-home.png')}/>
       <View style={styles.startBtn}>
-        <Button title="Get Started"/>
+        <Button onPress={() => setShowForm(true)} title="Get Started"/>
+        <Form visible={showForm} />
       </View>
     </View>
   );

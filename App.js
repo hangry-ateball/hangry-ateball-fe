@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Header } from 'react-native';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Hangry Ateball</Text>
+      </View>
+      <Image style={styles.eightBall} source={require('./assets/ate-ball-home.png')}/>
+      <View style={styles.startBtn}>
+        <Button title="Get Started"/>
       </View>
     </View>
   );
@@ -26,5 +30,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingBottom: 10,
     alignSelf: 'center'
+  },
+  startBtn: {
+    width: '80%',
+  },  
+  eightBall: {
+    width: 350,
+    resizeMode: 'contain'
   }
 });

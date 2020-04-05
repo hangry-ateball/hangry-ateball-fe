@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, View, Modal, Text, Button, Image, ScrollView } from 'react-native'
 
 
-const ResultPage = () => {
+const ResultPage = ({ visible }) => {
   return (
-    <Modal visible={true}>
+    <Modal visible={visible}>
       <View style={styles.resultContainer}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Casa Bonita</Text>

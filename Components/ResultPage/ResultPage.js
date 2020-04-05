@@ -14,10 +14,6 @@ const ResultPage = () => {
           <Text>303-420-6969</Text>
           <Text>69639 Burrito Way - Open in Maps</Text>
         </View>
-        {/* <FlatList 
-          renderItem=
-          
-        /> */}
         <ScrollView 
           showsHorizontalScrollIndicator={false} 
           horizontal={true} 
@@ -47,10 +43,16 @@ const ResultPage = () => {
           </View>
         </ScrollView>
         <View>
-          {/* menu and site */}
+          <Text>Explore Menu</Text>
+          <Text>http://www.casabonitadenver.com/</Text>
         </View>
         <View>
-          {/* buttons */}
+          <View style={styles.shareBtn}>
+            <Button title="Send to Friends"/>
+          </View>
+          <View style={styles.shakeAgainBtn}>
+            <Button color='darkblue' title="Shake "/>
+          </View>
         </View>
       </View>
     </Modal>
@@ -82,6 +84,13 @@ const styles = StyleSheet.create({
     width: 118, 
     height: 100,
     resizeMode : 'stretch' 
+  },
+  shareBtn: {
+    paddingTop: 30,
+    margin: 20,
+  },
+  shakeAgainBtn: {
+    margin: 20,
   }
 })
 

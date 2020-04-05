@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Modal, Text, Picker, Button } from 'react-native'
 
-const Form = ({visible}) => {
+const Form = ({visible, setShowForm, setShowResult}) => {
+  const [restaurantType, setRestaurantType] = useState('')
+  const [travelType, setTravelType] = useState('')
+  const [cost, setCost] = useState('')
+
+  const restaurantHandler = (type) => {
+    setRestaurantType(type)
+    console.log(restaurantType)
+  }
+
+  const travelHandler = (type) => {
+    setTravelType(type)
+  }
+
+  const costHandler = (cost) => {
+    setCost(cost)
+  }
+
+  const modalHandler = () => {
+    setShowForm(false)
+    setShowResult(true)
+  }
+
   return (
     <Modal visible={visible} animationType='slide'>
       <View style={styles.formContainer}>
@@ -9,34 +31,44 @@ const Form = ({visible}) => {
           <Text>Type</Text>
           <Picker
             itemStyle={{height: 44}}
+            selectedValue={restaurantType}
+            onValueChange={restaurantHandler}
           >
-            <Picker.Item label="Italian"/>
-            <Picker.Item label="Mexican"/>
-            <Picker.Item label="American"/>
+            <Picker.Item label="Italian" value="Italian"/>
+            <Picker.Item label="Mexican" value="Mexican"/>
+            <Picker.Item label="American" value="American"/>
           </Picker>
         </View>
         <View style={styles.pickerContainer}>
           <Text>Travel</Text>
           <Picker
             itemStyle={{height: 44}}
+            selectedValue={travelType}
+            // onValueChange={formInputHandler}
           >
-            <Picker.Item label="Walk"/>
-            <Picker.Item label="Drive"/>
+            <Picker.Item label="Walk" value="walk"/>
+            <Picker.Item label="Drive" value="drive"/>
           </Picker>
         </View>
         <View style={styles.pickerContainer}>
           <Text>Cost</Text>
           <Picker
             itemStyle={{height: 44}}
+            selectedValue={cost}
+            // onValueChange={formInputHandler}
           >
-            <Picker.Item label="$"/>
-            <Picker.Item label="$$"/>
-            <Picker.Item label="$$$"/>
-            <Picker.Item label="$$$$"/>
+            <Picker.Item label="$" value="1"/>
+            <Picker.Item label="$$" value="2"/>
+            <Picker.Item label="$$$" value="3"/>
+            <Picker.Item label="$$$$" value="4"/>
           </Picker>
         </View>
       <View style={styles.shakeBtn}>
-        <Button color='darkblue' title="Shake It"/>
+        <Button 
+          color='darkblue' 
+          title="Shake It" 
+          onPress={modalHandler}
+        />
       </View>
       <View style={styles.luckyBtn}>
         <Button color='green' title="Feeling Lucky"/>

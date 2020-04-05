@@ -5,6 +5,8 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 export default App = () => {
   const [showForm, setShowForm] = useState(false)
+  const [showResult, setShowResult] = useState(false)
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -13,8 +15,8 @@ export default App = () => {
       <Image style={styles.eightBall} source={require('./assets/ate-ball-home.png')}/>
       <View style={styles.startBtn}>
         <Button onPress={() => setShowForm(true)} title="Get Started"/>
-        <Form visible={showForm} />
-        <ResultPage />
+        <Form visible={showForm} setShowForm={setShowForm} setShowResult={setShowResult}/>
+        <ResultPage visible={showResult}/>
       </View>
     </View>
   );

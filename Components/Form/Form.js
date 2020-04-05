@@ -8,7 +8,6 @@ const Form = ({visible, setShowForm, setShowResult}) => {
 
   const restaurantHandler = (type) => {
     setRestaurantType(type)
-    console.log(restaurantType)
   }
 
   const travelHandler = (type) => {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from './Components/Form/Form'
+import ResultPage from './Components/ResultPage/ResultPage'
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 export default App = () => {
@@ -13,6 +14,7 @@ export default App = () => {
       <View style={styles.startBtn}>
         <Button onPress={() => setShowForm(true)} title="Get Started"/>
         <Form visible={showForm} />
+        <ResultPage />
       </View>
     </View>
   );

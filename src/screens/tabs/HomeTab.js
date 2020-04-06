@@ -1,6 +1,6 @@
 import React,{ useState } from 'react';
-import Form from '../../Components/Form/Form'
-import ResultPage from '../../Components/ResultPage/ResultPage'
+import Form from '../../components/Form/Form'
+import ResultPage from '../../components/ResultPage/ResultPage'
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 
 const HomeTab = () => {
@@ -9,10 +9,7 @@ const HomeTab = () => {
   
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Hangry Ateball</Text>
-      </View>
-      <Image style={styles.eightBall} source={require('../../assets/ate-ball-home.png')}/>
+      <Image style={styles.eightBall} source={require('../../../assets/ate-ball-home.png')}/>
       <View style={styles.startBtn}>
         <Button onPress={() => setShowForm(true)} title="Get Started"/>
         <Form visible={showForm} setShowForm={setShowForm} setShowResult={setShowResult}/>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Modal, Text, Picker, Button } from 'react-native'
+import { StyleSheet, View, Text, Picker, Button } from 'react-native'
 
-const Form = ({visible, setShowForm, setShowResult}) => {
+const FormScreen = ({ navigation }) => {
   const [restaurantType, setRestaurantType] = useState('')
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState('')
@@ -18,13 +18,7 @@ const Form = ({visible, setShowForm, setShowResult}) => {
     setCost(cost)
   }
 
-  const modalHandler = () => {
-    setShowForm(false)
-    setShowResult(true)
-  }
-
   return (
-    <Modal visible={visible} animationType='slide'>
       <View style={styles.formContainer}>
         <View style={styles.pickerContainer}>
           <Text>Type</Text>
@@ -66,14 +60,13 @@ const Form = ({visible, setShowForm, setShowResult}) => {
         <Button 
           color='darkblue' 
           title="Shake It" 
-          onPress={modalHandler}
+          onPress={() => navigation.navigate('Result')}
         />
       </View>
       <View style={styles.luckyBtn}>
         <Button color='green' title="Feeling Lucky"/>
       </View>
       </View>
-    </Modal>
   )
 }
 
@@ -81,7 +74,7 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 100,
+    // paddingTop: 100,
     width: '100%',
   },
   pickerContainer: {
@@ -99,4 +92,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Form;
+export default FormScreen

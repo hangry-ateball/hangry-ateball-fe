@@ -1,10 +1,9 @@
 import React from 'react'
-import { StyleSheet, View, Modal, Text, Button, Image, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, Button, Image, ScrollView } from 'react-native'
 
 
-const ResultPage = ({ visible }) => {
+const ResultScreen = () => {
   return (
-    <Modal visible={visible}>
       <View style={styles.resultContainer}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Casa Bonita</Text>
@@ -55,7 +54,6 @@ const ResultPage = ({ visible }) => {
           </View>
         </View>
       </View>
-    </Modal>
   )
 }
 
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
   resultContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 50,
+    // paddingTop: 50,
   },
   titleView: {
     alignSelf: 'center'
@@ -94,4 +92,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ResultPage
+export default ResultScreen

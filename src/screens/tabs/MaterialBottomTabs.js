@@ -11,17 +11,20 @@ const MaterialBottomTabs = createMaterialBottomTabNavigator();
 export const createBottomTabs = () => {
   return (
     <MaterialBottomTabs.Navigator
+      initialRouteName="Home"
       activeColor="white"
       inactiveColor="lightgrey"
     >
-      <MaterialBottomTabs.Screen name="Previous" component={PrevTab}
+      <MaterialBottomTabs.Screen 
+        name="Previous" 
+        component={PrevTab}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
             <Icon 
-              style={[{ height: 100, width: 45, marginTop: 5 }]} 
+              style={[{ height: 50, width: 40 }]} 
               color={color} 
-              size={45} 
+              size={40} 
               name={'view-list'} />
           )
         }}
@@ -34,21 +37,23 @@ export const createBottomTabs = () => {
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
             <Icon 
-              style={[{ height: 100, width: 50, marginTop: 5 }]} 
+              style={[{ height: 50, width: 40 }]} 
               color={color} 
-              size={50} 
+              size={40} 
               name={'numeric-8-circle'} />
           ),
         }}
       />
-      <MaterialBottomTabs.Screen name="Favorites" component={FavsTab}
+      <MaterialBottomTabs.Screen 
+        name="Favorites" 
+        component={FavsTab}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (
             <Icon 
-            style={[{ height: 100, width: 45, marginTop: 5 }]} 
+            style={[{ height: 50, width: 40 }]} 
             color={color} 
-            size={45} 
+            size={40} 
             name={'star'} />
           ),
         }}

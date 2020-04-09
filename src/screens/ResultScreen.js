@@ -1,18 +1,24 @@
 import React from 'react'
 import { StyleSheet, View, Text, Button, Image, ScrollView } from 'react-native'
-
+import openMap from 'react-native-open-maps';
 
 const ResultScreen = () => {
+  const goToRestaurant = () => {
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: 'Casa Bonita'  });
+  }
   return (
       <View style={styles.resultContainer}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Casa Bonita</Text>
         </View>
         <View>
-          <Text>Rating</Text>
+          <Text>Rating ⭐️⭐️⭐️⭐️⭐️</Text>
           <Text>303-420-6969</Text>
-          <Text>69639 Burrito Way - Open in Maps</Text>
         </View>
+        <Button
+          onPress={goToRestaurant}
+          title="6969 Burrito Way" 
+        />
         <ScrollView 
           showsHorizontalScrollIndicator={false} 
           horizontal={true} 

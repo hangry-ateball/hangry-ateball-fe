@@ -5,6 +5,18 @@ const FormScreen = ({ navigation }) => {
   const [restaurantType, setRestaurantType] = useState('')
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState('')
+  const [userLocation, setUserLocation] = useState({})
+
+  const findUserCoordinates = () => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        setUserLocation(JSON.stringify({latitude: position.coords.latitude, longitude: position.coords.longitude}));
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  };
+  findUserCoordinates()
 
   const restaurantHandler = (type) => {
     setRestaurantType(type)

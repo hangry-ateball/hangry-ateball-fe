@@ -9,4 +9,17 @@ describe('My First Test', () => {
       cy.get('div')
       cy.contains('Get Shakin')
   })
+
+  it.only('should load form labels properly', () => {
+      cy.get('div').contains('Get Shakin').click()
+      cy.contains('Type')
+      cy.contains('Travel')
+      cy.contains('Cost')
+  })
+  it.only('should load form inputs properly', () => {
+    cy.get('div').contains('Get Shakin').click()
+    cy.get('select')
+    cy.get('option')
+  })
+
 })

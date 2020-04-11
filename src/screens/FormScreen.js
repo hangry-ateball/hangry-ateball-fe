@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Text, Picker, Button } from 'react-native'
+import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 
 const FormScreen = ({ navigation }) => {
   const [restaurantType, setRestaurantType] = useState('')
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState('')
   const [userLocation, setUserLocation] = useState({})
+  const [enteredAddress, setEnteredAddress] = useState('')
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
@@ -17,6 +18,20 @@ const FormScreen = ({ navigation }) => {
     );
   };
   findUserCoordinates()
+
+  const renderManualInput = () => {
+    return (
+      <View style={styles.pickerContainer}>
+        <Text>Your Current Address</Text>
+        <TextInput 
+          style={styles.input} 
+          placeholder='Street, City, and State...' 
+          onChangeText={addressInputHandler}
+          value={enteredAddress}   
+        />
+      </View>
+    )
+  }
 
   const restaurantHandler = (type) => {
     setRestaurantType(type)
@@ -30,8 +45,13 @@ const FormScreen = ({ navigation }) => {
     setCost(cost)
   }
 
+  const addressInputHandler = (enteredAddress) => {
+    setEnteredAddress(enteredAddress)
+  }
+
   return (
       <View style={styles.formContainer}>
+        {Object.keys(userLocation).length === 0 ? renderManualInput() : null}
         <View style={styles.pickerContainer}>
           <Text>Type</Text>
           <Picker
@@ -86,12 +106,17 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 100,
     width: '100%',
   },
   pickerContainer: {
     paddingTop: 40,
     width: '80%'
+  },
+  input: {
+    backgroundColor: 'white',
+    fontSize: 20,
+    marginVertical: 5,
+    padding: 10
   },
   shakeBtn: {
     paddingTop: 30,

@@ -11,7 +11,7 @@ const FormScreen = ({ navigation }) => {
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
-        setUserLocation(JSON.stringify({latitude: position.coords.latitude, longitude: position.coords.longitude}));
+        setUserLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
       }
     );
   };
@@ -90,7 +90,11 @@ const FormScreen = ({ navigation }) => {
         <Button 
           color='darkblue' 
           title="Shake It" 
-          onPress={() => navigation.navigate('Result')}
+          onPress={() => navigation.navigate('Result', {
+            userLocation: userLocation,
+            restaurantType: 'American',
+            cost: 3,
+          })}
         />
       </View>
       <View style={styles.luckyBtn}>

@@ -1,8 +1,14 @@
 import React from 'react'
 import { StyleSheet, View, Text, Button, Image, ScrollView } from 'react-native'
 import openMap from 'react-native-open-maps';
+import { getRestaurantData } from './apiCalls'
 
-const ResultScreen = () => {
+const ResultScreen = ({route}) => {
+  const { userLocation } = route.params;
+  const { restaurantType } = route.params;
+  const { cost } = route.params;
+  getRestaurantData(userLocation, restaurantType, cost).then(data => console.log(data))
+  
   const goToRestaurant = () => {
     openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: 'Casa Bonita'  });
   }

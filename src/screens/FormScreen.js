@@ -6,6 +6,7 @@ const FormScreen = ({ navigation }) => {
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState('')
   const [userLocation, setUserLocation] = useState({})
+  const [enteredAddress, setEnteredAddress] = useState('')
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
@@ -22,7 +23,12 @@ const FormScreen = ({ navigation }) => {
     return (
       <View style={styles.pickerContainer}>
         <Text>Your Current Address</Text>
-        <TextInput style={styles.input} placeholder='Your Current Address...' />
+        <TextInput 
+          style={styles.input} 
+          placeholder='Street, City, and State...' 
+          onChangeText={addressInputHandler}
+          value={enteredAddress}   
+        />
       </View>
     )
   }
@@ -38,7 +44,10 @@ const FormScreen = ({ navigation }) => {
   const costHandler = (cost) => {
     setCost(cost)
   }
-  
+
+  const addressInputHandler = (enteredAddress) => {
+    setEnteredAddress(enteredAddress)
+  }
 
   return (
       <View style={styles.formContainer}>

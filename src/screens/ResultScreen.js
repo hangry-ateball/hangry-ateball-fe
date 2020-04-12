@@ -9,15 +9,16 @@ const ResultScreen = () => {
   return (
       <View style={styles.resultContainer}>
         <View style={styles.titleView}>
-          <Text style={styles.title}>Casa Bonita</Text>
+          <Text style={styles.title} accessibilityLabel="title">Casa Bonita</Text>
         </View>
         <View>
           <Text>Rating ⭐️⭐️⭐️⭐️⭐️</Text>
-          <Text>303-420-6969</Text>
+          <Text dataDetectorType='phoneNumber'>303-420-6969</Text>
         </View>
         <Button
           onPress={goToRestaurant}
           title="6969 Burrito Way" 
+          accessibilityRole='button'
         />
         <ScrollView 
           showsHorizontalScrollIndicator={false} 

@@ -12,9 +12,7 @@ const FormScreen = ({ navigation }) => {
     navigator.geolocation.getCurrentPosition(
       position => {
         setUserLocation(JSON.stringify({latitude: position.coords.latitude, longitude: position.coords.longitude}));
-      },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      }
     );
   };
   findUserCoordinates()
@@ -57,6 +55,7 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={restaurantType}
+            testID="Type"
             onValueChange={restaurantHandler}
           >
             <Picker.Item label="Italian" value="Italian"/>
@@ -69,6 +68,7 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={travelType}
+            testID="Travel"
             // onValueChange={formInputHandler}
           >
             <Picker.Item label="Walk" value="walk"/>
@@ -80,6 +80,7 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={cost}
+            testID="Cost"
             // onValueChange={formInputHandler}
           >
             <Picker.Item label="$" value="1"/>

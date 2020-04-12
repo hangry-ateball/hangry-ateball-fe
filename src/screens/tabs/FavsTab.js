@@ -33,7 +33,13 @@ const FavTab = () =>
   <View style={styles.container}>
       <Text style={styles.title}>Favorites</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {mockData.map(restaurant => {
+      {mockData.length === 0 
+        ? 
+          <View style={styles.noFavorites}>
+            <Text style={{fontSize: 25}}>You don't have any favorites 🥺</Text>
+          </View>
+        :
+        mockData.map(restaurant => {
           return <View style={styles.favorite}>
                   <View style={styles.name}>
                     <Text style={styles.text}>{restaurant.name}</Text>
@@ -50,6 +56,9 @@ const FavTab = () =>
   </View>
 
 const styles = StyleSheet.create({
+  noFavorites: {
+    paddingTop: 20
+  },
   container: {
     alignItems: 'center',
     width: '100%',

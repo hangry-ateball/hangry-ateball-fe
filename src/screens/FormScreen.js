@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 
 const FormScreen = ({ navigation }) => {
-  const [restaurantType, setRestaurantType] = useState('')
+  const [restaurantType, setRestaurantType] = useState(null)
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState(null)
   const [userLocation, setUserLocation] = useState({})
@@ -23,7 +23,7 @@ const FormScreen = ({ navigation }) => {
         <Text>Your Current Address</Text>
         <TextInput 
           style={styles.input} 
-          placeholder='Street, City, and State...' 
+          placeholder='ex. 1234 Hangry St. Ateball, HA' 
           onChangeText={addressInputHandler}
           value={enteredAddress}   
         />
@@ -92,6 +92,7 @@ const FormScreen = ({ navigation }) => {
           title="Shake It" 
           onPress={() => navigation.navigate('Result', {
             userLocation: userLocation,
+            enteredAddress: enteredAddress,
             restaurantType: restaurantType,
             cost: cost,
             travelType: travelType,
@@ -104,6 +105,7 @@ const FormScreen = ({ navigation }) => {
           title="Feeling Lucky"
           onPress={() => navigation.navigate('Result', {
             userLocation: userLocation,
+            enteredAddress: enteredAddress,
             travelType: travelType,
           })}
         />

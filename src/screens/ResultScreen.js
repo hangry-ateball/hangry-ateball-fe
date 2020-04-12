@@ -4,6 +4,7 @@ import openMap from 'react-native-open-maps';
 
 const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
+  const { enteredAddress } = route.params;
   const { restaurantType } = route.params;
   const { cost } = route.params;
   const { travelType } = route.params;
@@ -64,7 +65,7 @@ const ResultScreen = ({route}) => {
   }, [])
 
   const goToRestaurant = () => {
-    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: {userLocation}, travelType: {travelType}, end: `${restaurant.name}`  });
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: {travelType}, end: `${restaurant.name}`  });
   }
 
   return (

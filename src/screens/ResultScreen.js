@@ -1,29 +1,65 @@
-import React from 'react'
-import { StyleSheet, View, Text, Button, Image, ScrollView } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator } from 'react-native'
 import openMap from 'react-native-open-maps';
-import { getRestaurantData } from './apiCalls'
 
 const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
   const { restaurantType } = route.params;
   const { cost } = route.params;
-  getRestaurantData(userLocation, restaurantType, cost).then(data => console.log(data))
-  
-  const goToRestaurant = () => {
-    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: 'Casa Bonita'  });
+  const isCancelled = useRef(false);
+  const [fetchFailed, setFetchFail] = useState(false);
+  const [restaurant, setRestaurant] = useState({});
+
+  const fetchRestaurant = async (userLocation, restaurantType, price) => {
+    if(restaurantType && price) {
+      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}&price=${price}`) 
+        .then(response => response.json())
+        .then(data => {
+          if (!isCancelled.current) {
+            setRestaurant(data.data.attributes)
+            setLoader(false)
+          }
+        })
+        .catch(error => setFetchFail(true))
+    } else if (restaurantType) {
+      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}`) 
+        .then(response => setRestaurant(response.json()))
+        .catch(error => setFetchFail(true))
+    } else if (price) {
+      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&price=${price}`) 
+        .then(response => setRestaurant(response.json()))
+        .catch(error => setFetchFail(true))
+    } else {
+      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`) 
+        .then(response => setRestaurant(response.json()))
+        .catch(error => setFetchFail(true))
+    }  
   }
+
+  useEffect(() => {
+    fetchRestaurant(userLocation, restaurantType, cost)
+    return () => {
+      isCancelled.current = true;
+    };
+  }, [])
+
+  const goToRestaurant = () => {
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: `${restaurant.name}`  });
+  }
+
   return (
       <View style={styles.resultContainer}>
         <View style={styles.titleView}>
-          <Text style={styles.title}>Casa Bonita</Text>
+          <Text style={styles.title}>{restaurant.name}</Text>
         </View>
         <View>
-          <Text>Rating ⭐️⭐️⭐️⭐️⭐️</Text>
-          <Text>303-420-6969</Text>
+          <Text>Rating: {restaurant.rating}</Text>
+          <Text>{restaurant.phone}</Text>
+          <Text>{restaurant.location}</Text>
         </View>
         <Button
           onPress={goToRestaurant}
-          title="6969 Burrito Way" 
+          title='Lets go'
         />
         <ScrollView 
           showsHorizontalScrollIndicator={false} 
@@ -73,7 +109,6 @@ const styles = StyleSheet.create({
   resultContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 50,
   },
   titleView: {
     alignSelf: 'center'

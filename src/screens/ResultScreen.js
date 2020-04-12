@@ -6,6 +6,7 @@ const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
   const { restaurantType } = route.params;
   const { cost } = route.params;
+  const { travelType } = route.params;
   const isCancelled = useRef(false);
   const [fetchFailed, setFetchFail] = useState(false);
   const [isLoading, setLoader] = useState(true);
@@ -24,15 +25,33 @@ const ResultScreen = ({route}) => {
         .catch(error => [setFetchFail(true), setLoader(false)])
     } else if (restaurantType) {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}`) 
-        .then(response => setRestaurant(response.json()))
+        .then(response => response.json())
+        .then(data => {
+          if (!isCancelled.current) {
+            setRestaurant(data.data.attributes)
+            setLoader(false)
+          }
+        })
         .catch(error => [setFetchFail(true), setLoader(false)])
     } else if (price) {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&price=${price}`) 
-        .then(response => setRestaurant(response.json()))
+        .then(response => response.json())
+        .then(data => {
+          if (!isCancelled.current) {
+            setRestaurant(data.data.attributes)
+            setLoader(false)
+          }
+        })
         .catch(error => [setFetchFail(true), setLoader(false)])
     } else {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`) 
-        .then(response => setRestaurant(response.json()))
+        .then(response => response.json())
+        .then(data => {
+          if (!isCancelled.current) {
+            setRestaurant(data.data.attributes)
+            setLoader(false)
+          }
+        })
         .catch(error => [setFetchFail(true), setLoader(false)])
     }  
   }
@@ -43,15 +62,15 @@ const ResultScreen = ({route}) => {
       isCancelled.current = true;
     };
   }, [])
-  console.log(fetchFailed)
+
   const goToRestaurant = () => {
-    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: `${restaurant.name}`  });
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: {userLocation}, travelType: {travelType}, end: `${restaurant.name}`  });
   }
 
   return (
     <View style={styles.resultContainer}>
       {isLoading ? <ActivityIndicator size='large' color='blue'/> : fetchFailed ? 
-        <View style={{paddingTop: 200, alignItems: 'center'}}>
+        <View style={{alignItems: 'center', paddingTop: '50%'}}>
           <Text style={styles.errorText}>😰Uh Oh😰</Text>
           <Text style={styles.errorText}>Something went wrong...</Text>
           <Text style={styles.errorText}>Please try again!</Text>
@@ -62,6 +81,7 @@ const ResultScreen = ({route}) => {
             <Text style={styles.title}>{restaurant.name}</Text>
           </View>
           <View>
+            <Text>{restaurant.price}</Text>
             <Text>Rating: {restaurant.rating}</Text>
             <Text>{restaurant.phone}</Text>
             <Text>{restaurant.location}</Text>
@@ -76,32 +96,17 @@ const ResultScreen = ({route}) => {
             style={{width: '100%'}}
           >
             <View style={styles.imgContainer}>
-              <Image
-                style={styles.restaurantImg} 
-                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-              />
-              <Image
-                style={styles.restaurantImg} 
-                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-              />
-              <Image
-                style={styles.restaurantImg} 
-                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-              />
-              <Image
-                style={styles.restaurantImg} 
-                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-              />
-              <Image
-                style={styles.restaurantImg} 
-                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-              />
+              {
+                restaurant.photos.map((photo, i) => {
+                return <Image
+                          key={'img' + i}
+                          style={styles.restaurantImg} 
+                          source={{ uri: photo }}
+                        />
+                })
+              }
             </View>
           </ScrollView>
-          <View>
-            <Text>Explore Menu</Text>
-            <Text>http://www.casabonitadenver.com/</Text>
-          </View>
           <View>
             <View style={styles.shareBtn}>
               <Button title="Send to Friends"/>

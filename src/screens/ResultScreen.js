@@ -8,6 +8,7 @@ const ResultScreen = ({route}) => {
   const { cost } = route.params;
   const isCancelled = useRef(false);
   const [fetchFailed, setFetchFail] = useState(false);
+  const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
 
   const fetchRestaurant = async (userLocation, restaurantType, price) => {
@@ -20,19 +21,19 @@ const ResultScreen = ({route}) => {
             setLoader(false)
           }
         })
-        .catch(error => setFetchFail(true))
+        .catch(error => [setFetchFail(true), setLoader(false)])
     } else if (restaurantType) {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}`) 
         .then(response => setRestaurant(response.json()))
-        .catch(error => setFetchFail(true))
+        .catch(error => [setFetchFail(true), setLoader(false)])
     } else if (price) {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&price=${price}`) 
         .then(response => setRestaurant(response.json()))
-        .catch(error => setFetchFail(true))
+        .catch(error => [setFetchFail(true), setLoader(false)])
     } else {
       return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`) 
         .then(response => setRestaurant(response.json()))
-        .catch(error => setFetchFail(true))
+        .catch(error => [setFetchFail(true), setLoader(false)])
     }  
   }
 
@@ -42,70 +43,84 @@ const ResultScreen = ({route}) => {
       isCancelled.current = true;
     };
   }, [])
-
+  console.log(fetchFailed)
   const goToRestaurant = () => {
     openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: 'walk', end: `${restaurant.name}`  });
   }
 
   return (
-      <View style={styles.resultContainer}>
-        <View style={styles.titleView}>
-          <Text style={styles.title}>{restaurant.name}</Text>
+    <View style={styles.resultContainer}>
+      {isLoading ? <ActivityIndicator size='large' color='blue'/> : fetchFailed ? 
+        <View style={{paddingTop: 200, alignItems: 'center'}}>
+          <Text style={styles.errorText}>😰Uh Oh😰</Text>
+          <Text style={styles.errorText}>Something went wrong...</Text>
+          <Text style={styles.errorText}>Please try again!</Text>
         </View>
-        <View>
-          <Text>Rating: {restaurant.rating}</Text>
-          <Text>{restaurant.phone}</Text>
-          <Text>{restaurant.location}</Text>
-        </View>
-        <Button
-          onPress={goToRestaurant}
-          title='Lets go'
-        />
-        <ScrollView 
-          showsHorizontalScrollIndicator={false} 
-          horizontal={true} 
-          style={{width: '100%'}}
-        >
-          <View style={styles.imgContainer}>
-            <Image
-              style={styles.restaurantImg} 
-              source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-            />
-            <Image
-              style={styles.restaurantImg} 
-              source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-            />
-            <Image
-              style={styles.restaurantImg} 
-              source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-            />
-            <Image
-              style={styles.restaurantImg} 
-              source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-            />
-            <Image
-              style={styles.restaurantImg} 
-              source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
-            />
+        :
+        <>
+          <View style={styles.titleView}>
+            <Text style={styles.title}>{restaurant.name}</Text>
           </View>
-        </ScrollView>
-        <View>
-          <Text>Explore Menu</Text>
-          <Text>http://www.casabonitadenver.com/</Text>
-        </View>
-        <View>
-          <View style={styles.shareBtn}>
-            <Button title="Send to Friends"/>
+          <View>
+            <Text>Rating: {restaurant.rating}</Text>
+            <Text>{restaurant.phone}</Text>
+            <Text>{restaurant.location}</Text>
           </View>
-          <View style={styles.shakeAgainBtn}>
-            <Button color='darkblue' title="Shake "/>
+          <Button
+            onPress={goToRestaurant}
+            title='Lets go'
+          />
+          <ScrollView 
+            showsHorizontalScrollIndicator={false} 
+            horizontal={true} 
+            style={{width: '100%'}}
+          >
+            <View style={styles.imgContainer}>
+              <Image
+                style={styles.restaurantImg} 
+                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
+              />
+              <Image
+                style={styles.restaurantImg} 
+                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
+              />
+              <Image
+                style={styles.restaurantImg} 
+                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
+              />
+              <Image
+                style={styles.restaurantImg} 
+                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
+              />
+              <Image
+                style={styles.restaurantImg} 
+                source={{ uri: 'https://theknow.denverpost.com/wp-content/uploads/2018/12/BZ28CASABONITA1HC_4877.jpg'}}
+              />
+            </View>
+          </ScrollView>
+          <View>
+            <Text>Explore Menu</Text>
+            <Text>http://www.casabonitadenver.com/</Text>
           </View>
-        </View>
-      </View>
+          <View>
+            <View style={styles.shareBtn}>
+              <Button title="Send to Friends"/>
+            </View>
+            <View style={styles.shakeAgainBtn}>
+              <Button color='darkblue' title="Shake "/>
+            </View>
+          </View>
+        </>
+      }
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  errorText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
   resultContainer: {
     justifyContent: 'center',
     alignItems: 'center',

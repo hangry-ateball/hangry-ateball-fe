@@ -4,9 +4,9 @@ import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 const FormScreen = ({ navigation }) => {
   const [restaurantType, setRestaurantType] = useState('')
   const [travelType, setTravelType] = useState('')
-  const [cost, setCost] = useState('')
+  const [cost, setCost] = useState(null)
   const [userLocation, setUserLocation] = useState({})
-  const [enteredAddress, setEnteredAddress] = useState('')
+  const [enteredAddress, setEnteredAddress] = useState(null)
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
@@ -48,8 +48,8 @@ const FormScreen = ({ navigation }) => {
   }
 
   return (
-      <View style={styles.formContainer}>
-        {Object.keys(userLocation).length === 0 ? renderManualInput() : null}
+    <View style={styles.formContainer}>
+      {Object.keys(userLocation).length === 0 ? renderManualInput() : null}
         <View style={styles.pickerContainer}>
           <Text>Type</Text>
           <Picker
@@ -67,7 +67,7 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={travelType}
-            // onValueChange={formInputHandler}
+            onValueChange={travelHandler}
           >
             <Picker.Item label="Walk" value="walk"/>
             <Picker.Item label="Drive" value="drive"/>
@@ -78,7 +78,7 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={cost}
-            // onValueChange={formInputHandler}
+            onValueChange={costHandler}
           >
             <Picker.Item label="$" value="1"/>
             <Picker.Item label="$$" value="2"/>
@@ -86,21 +86,29 @@ const FormScreen = ({ navigation }) => {
             <Picker.Item label="$$$$" value="4"/>
           </Picker>
         </View>
-      <View style={styles.shakeBtn}>
+        <View style={styles.shakeBtn}>
         <Button 
           color='darkblue' 
           title="Shake It" 
           onPress={() => navigation.navigate('Result', {
             userLocation: userLocation,
-            restaurantType: 'American',
-            cost: 3,
+            restaurantType: restaurantType,
+            cost: cost,
+            travelType: travelType,
+          })}
+        />
+        </View>
+        <View style={styles.luckyBtn}>
+        <Button 
+          color='green' 
+          title="Feeling Lucky"
+          onPress={() => navigation.navigate('Result', {
+            userLocation: userLocation,
+            travelType: travelType,
           })}
         />
       </View>
-      <View style={styles.luckyBtn}>
-        <Button color='green' title="Feeling Lucky"/>
-      </View>
-      </View>
+    </View>
   )
 }
 

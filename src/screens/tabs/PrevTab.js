@@ -143,7 +143,13 @@ const PrevTab = () =>
   <View style={styles.container}>
       <Text style={styles.title}>Previous</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {mockData.map(restaurant => {
+      {mockData.length === 0 
+        ? 
+          <View style={styles.noPrevious}>
+            <Text style={{fontSize: 25}}>You don't have any previous 🥺</Text>
+          </View>
+        :
+        mockData.map(restaurant => {
           return <View style={styles.previous}>
                   <View style={styles.name}>
                     <Text style={styles.text}>{restaurant.name}</Text>
@@ -160,6 +166,9 @@ const PrevTab = () =>
   </View>
 
 const styles = StyleSheet.create({
+  noPrevious: {
+    paddingTop: 20,
+  },
   container: {
     alignItems: 'center',
     width: '100%',

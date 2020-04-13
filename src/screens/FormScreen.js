@@ -30,15 +30,10 @@ const FormScreen = ({ navigation }) => {
           onChangeText={enteredAddress => setEnteredAddress(enteredAddress)}
           value={enteredAddress}   
         />
+        {errors.address && <Text>Without Location Access on, address is required.</Text>}
       </View>
     )
   }
-
-  const onSubmit = () => navigation.navigate('Result', {
-    userLocation: userLocation,
-    enteredAddress: enteredAddress,
-    travelType: travelType,
-  })
 
   return (
     <View style={styles.formContainer}>
@@ -83,20 +78,24 @@ const FormScreen = ({ navigation }) => {
         <Button 
           color='darkblue' 
           title="Shake It" 
-          onPress={() => navigation.navigate('Result', {
+          onPress={handleSubmit(() => navigation.navigate('Result', {
             userLocation: userLocation,
             enteredAddress: enteredAddress,
             restaurantType: restaurantType,
             cost: cost,
             travelType: travelType,
-          })}
+          }))}
         />
         </View>
         <View style={styles.luckyBtn}>
         <Button 
           color='green' 
           title="Feeling Lucky"
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(() => navigation.navigate('Result', {
+            userLocation: userLocation,
+            enteredAddress: enteredAddress,
+            travelType: travelType,
+          }))}
         />
       </View>
     </View>

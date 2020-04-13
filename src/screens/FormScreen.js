@@ -48,6 +48,7 @@ const FormScreen = ({ navigation }) => {
             selectedValue={restaurantType}
             onValueChange={type => setRestaurantType(type)}
           >
+            <Picker.Item label="Any" value=""/>
             <Picker.Item label="Italian" value="Italian"/>
             <Picker.Item label="Mexican" value="Mexican"/>
             <Picker.Item label="American" value="American"/>

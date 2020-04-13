@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
 import openMap from 'react-native-open-maps';
 
 const ResultScreen = ({route}) => {
@@ -59,7 +59,7 @@ const ResultScreen = ({route}) => {
           <View>
             <Text>{restaurant.price}</Text>
             <Text>Rating: {restaurant.rating}</Text>
-            <Text>{restaurant.phone}</Text>
+            <Text onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.phone.slice(2, -1)}</Text>
             <Text>{restaurant.location}</Text>
           </View>
           <Button

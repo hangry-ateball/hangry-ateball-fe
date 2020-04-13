@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 
 const FormScreen = ({ navigation }) => {
-  const [restaurantType, setRestaurantType] = useState('')
+  const [restaurantType, setRestaurantType] = useState(null)
   const [travelType, setTravelType] = useState('')
-  const [cost, setCost] = useState('')
+  const [cost, setCost] = useState(null)
   const [userLocation, setUserLocation] = useState({})
-  const [enteredAddress, setEnteredAddress] = useState('')
+  const [enteredAddress, setEnteredAddress] = useState(null)
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
       position => {
-        setUserLocation(JSON.stringify({latitude: position.coords.latitude, longitude: position.coords.longitude}));
+        setUserLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
       }
     );
   };
@@ -23,7 +23,7 @@ const FormScreen = ({ navigation }) => {
         <Text>Your Current Address</Text>
         <TextInput 
           style={styles.input} 
-          placeholder='Street, City, and State...' 
+          placeholder='ex. 1234 Hangry St. Ateball, HA' 
           onChangeText={addressInputHandler}
           value={enteredAddress}   
         />
@@ -48,8 +48,8 @@ const FormScreen = ({ navigation }) => {
   }
 
   return (
-      <View style={styles.formContainer}>
-        {Object.keys(userLocation).length === 0 ? renderManualInput() : null}
+    <View style={styles.formContainer}>
+      {Object.keys(userLocation).length === 0 ? renderManualInput() : null}
         <View style={styles.pickerContainer}>
           <Text>Type</Text>
           <Picker
@@ -69,7 +69,7 @@ const FormScreen = ({ navigation }) => {
             itemStyle={{height: 44}}
             selectedValue={travelType}
             testID="Travel"
-            // onValueChange={formInputHandler}
+            onValueChange={travelHandler}
           >
             <Picker.Item label="Walk" value="walk"/>
             <Picker.Item label="Drive" value="drive"/>
@@ -81,7 +81,7 @@ const FormScreen = ({ navigation }) => {
             itemStyle={{height: 44}}
             selectedValue={cost}
             testID="Cost"
-            // onValueChange={formInputHandler}
+            onValueChange={costHandler}
           >
             <Picker.Item label="$" value="1"/>
             <Picker.Item label="$$" value="2"/>
@@ -89,17 +89,31 @@ const FormScreen = ({ navigation }) => {
             <Picker.Item label="$$$$" value="4"/>
           </Picker>
         </View>
-      <View style={styles.shakeBtn}>
+        <View style={styles.shakeBtn}>
         <Button 
           color='darkblue' 
           title="Shake It" 
-          onPress={() => navigation.navigate('Result')}
+          onPress={() => navigation.navigate('Result', {
+            userLocation: userLocation,
+            enteredAddress: enteredAddress,
+            restaurantType: restaurantType,
+            cost: cost,
+            travelType: travelType,
+          })}
+        />
+        </View>
+        <View style={styles.luckyBtn}>
+        <Button 
+          color='green' 
+          title="Feeling Lucky"
+          onPress={() => navigation.navigate('Result', {
+            userLocation: userLocation,
+            enteredAddress: enteredAddress,
+            travelType: travelType,
+          })}
         />
       </View>
-      <View style={styles.luckyBtn}>
-        <Button color='green' title="Feeling Lucky"/>
-      </View>
-      </View>
+    </View>
   )
 }
 

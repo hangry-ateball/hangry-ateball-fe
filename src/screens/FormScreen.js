@@ -47,6 +47,7 @@ const FormScreen = ({ navigation }) => {
             itemStyle={{height: 44}}
             selectedValue={restaurantType}
             onValueChange={type => setRestaurantType(type)}
+            testID="Type"
           >
             <Picker.Item label="Any" value=""/>
             <Picker.Item label="Italian" value="Italian"/>
@@ -60,6 +61,7 @@ const FormScreen = ({ navigation }) => {
             itemStyle={{height: 44}}
             selectedValue={travelType}
             onValueChange={type => setTravelType(type)}
+            testID="Travel"
           >
             <Picker.Item label="Walk" value="walk"/>
             <Picker.Item label="Drive" value="drive"/>
@@ -71,6 +73,7 @@ const FormScreen = ({ navigation }) => {
             itemStyle={{height: 44}}
             selectedValue={cost}
             onValueChange={cost => setCost(cost)}
+            testID="Cost"
           >
             <Picker.Item label="Any" value=""/>
             <Picker.Item label="$" value="1"/>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 
 const FormScreen = ({ navigation }) => {
@@ -6,7 +7,8 @@ const FormScreen = ({ navigation }) => {
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState(null)
   const [userLocation, setUserLocation] = useState({})
-  const [enteredAddress, setEnteredAddress] = useState(null)
+  const [enteredAddress, setEnteredAddress] = useState("")
+  const { control, handleSubmit, errors } = useForm()
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
@@ -21,30 +23,19 @@ const FormScreen = ({ navigation }) => {
     return (
       <View style={styles.pickerContainer}>
         <Text>Your Current Address</Text>
-        <TextInput 
+        <Controller 
+          as={TextInput}
+          control={control}
+          name='enteredAddress' 
+          rules={{ required: true }}
           style={styles.input} 
-          placeholder='ex. 1234 Hangry St. Ateball, HA' 
-          onChangeText={addressInputHandler}
+          placeholder='ex. 1234 Hangry St. Denver, CO' 
+          onChangeText={enteredAddress => setEnteredAddress(enteredAddress)}
           value={enteredAddress}   
         />
+        {errors.enteredAddress && <Text>Without Location Access on, address is required.</Text>}
       </View>
     )
-  }
-
-  const restaurantHandler = (type) => {
-    setRestaurantType(type)
-  }
-
-  const travelHandler = (type) => {
-    setTravelType(type)
-  }
-
-  const costHandler = (cost) => {
-    setCost(cost)
-  }
-
-  const addressInputHandler = (enteredAddress) => {
-    setEnteredAddress(enteredAddress)
   }
 
   return (
@@ -55,9 +46,10 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={restaurantType}
+            onValueChange={type => setRestaurantType(type)}
             testID="Type"
-            onValueChange={restaurantHandler}
           >
+            <Picker.Item label="Any" value=""/>
             <Picker.Item label="Italian" value="Italian"/>
             <Picker.Item label="Mexican" value="Mexican"/>
             <Picker.Item label="American" value="American"/>
@@ -68,8 +60,8 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={travelType}
+            onValueChange={type => setTravelType(type)}
             testID="Travel"
-            onValueChange={travelHandler}
           >
             <Picker.Item label="Walk" value="walk"/>
             <Picker.Item label="Drive" value="drive"/>
@@ -80,9 +72,10 @@ const FormScreen = ({ navigation }) => {
           <Picker
             itemStyle={{height: 44}}
             selectedValue={cost}
+            onValueChange={cost => setCost(cost)}
             testID="Cost"
-            onValueChange={costHandler}
           >
+            <Picker.Item label="Any" value=""/>
             <Picker.Item label="$" value="1"/>
             <Picker.Item label="$$" value="2"/>
             <Picker.Item label="$$$" value="3"/>
@@ -93,24 +86,24 @@ const FormScreen = ({ navigation }) => {
         <Button 
           color='darkblue' 
           title="Shake It" 
-          onPress={() => navigation.navigate('Result', {
+          onPress={handleSubmit(() => navigation.navigate('Result', {
             userLocation: userLocation,
             enteredAddress: enteredAddress,
             restaurantType: restaurantType,
             cost: cost,
             travelType: travelType,
-          })}
+          }))}
         />
         </View>
         <View style={styles.luckyBtn}>
         <Button 
           color='green' 
           title="Feeling Lucky"
-          onPress={() => navigation.navigate('Result', {
+          onPress={handleSubmit(() => navigation.navigate('Result', {
             userLocation: userLocation,
             enteredAddress: enteredAddress,
             travelType: travelType,
-          })}
+          }))}
         />
       </View>
     </View>

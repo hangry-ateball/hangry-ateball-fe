@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { StyleSheet, View, Text, Picker, Button, TextInput } from 'react-native'
 
 const FormScreen = ({ navigation }) => {
@@ -7,8 +7,8 @@ const FormScreen = ({ navigation }) => {
   const [travelType, setTravelType] = useState('')
   const [cost, setCost] = useState(null)
   const [userLocation, setUserLocation] = useState({})
-  const [enteredAddress, setEnteredAddress] = useState(null)
-  const { register, handleSubmit, errors } = useForm()
+  const [enteredAddress, setEnteredAddress] = useState("")
+  const { control, handleSubmit, errors } = useForm()
 
   const findUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
@@ -23,14 +23,17 @@ const FormScreen = ({ navigation }) => {
     return (
       <View style={styles.pickerContainer}>
         <Text>Your Current Address</Text>
-        <TextInput 
-          ref={register({ name: 'address'}, { required: true })}
+        <Controller 
+          as={TextInput}
+          control={control}
+          name='enteredAddress' 
+          rules={{ required: true }}
           style={styles.input} 
           placeholder='ex. 1234 Hangry St. Denver, CO' 
           onChangeText={enteredAddress => setEnteredAddress(enteredAddress)}
           value={enteredAddress}   
         />
-        {errors.address && <Text>Without Location Access on, address is required.</Text>}
+        {errors.enteredAddress && <Text>Without Location Access on, address is required.</Text>}
       </View>
     )
   }
@@ -68,6 +71,7 @@ const FormScreen = ({ navigation }) => {
             selectedValue={cost}
             onValueChange={cost => setCost(cost)}
           >
+            <Picker.Item label="Any" value=""/>
             <Picker.Item label="$" value="1"/>
             <Picker.Item label="$$" value="2"/>
             <Picker.Item label="$$$" value="3"/>

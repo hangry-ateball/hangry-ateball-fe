@@ -13,48 +13,23 @@ const ResultScreen = ({route}) => {
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
 
-  const fetchRestaurant = async (userLocation, restaurantType, price) => {
-    if(restaurantType && price) {
-      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}&price=${price}`) 
-        .then(response => response.json())
-        .then(data => {
-          if (!isCancelled.current) {
-            setRestaurant(data.data.attributes)
-            setLoader(false)
-          }
-        })
-        .catch(error => [setFetchFail(true), setLoader(false)])
-    } else if (restaurantType) {
-      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&categories=${restaurantType}`) 
-        .then(response => response.json())
-        .then(data => {
-          if (!isCancelled.current) {
-            setRestaurant(data.data.attributes)
-            setLoader(false)
-          }
-        })
-        .catch(error => [setFetchFail(true), setLoader(false)])
-    } else if (price) {
-      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}&price=${price}`) 
-        .then(response => response.json())
-        .then(data => {
-          if (!isCancelled.current) {
-            setRestaurant(data.data.attributes)
-            setLoader(false)
-          }
-        })
-        .catch(error => [setFetchFail(true), setLoader(false)])
-    } else {
-      return await fetch(`https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`) 
-        .then(response => response.json())
-        .then(data => {
-          if (!isCancelled.current) {
-            setRestaurant(data.data.attributes)
-            setLoader(false)
-          }
-        })
-        .catch(error => [setFetchFail(true), setLoader(false)])
-    }  
+  const fetchRestaurant = (userLocation, restaurantType, price) => {
+    const url = `https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+    const checkIfCancelled = (data) => {
+      if (!isCancelled.current) {
+        setRestaurant(data.data.attributes)
+        setLoader(false)
+      }
+    }
+    const decideFetch = async () => {
+      return restaurantType && price ? await fetch(`${url}&categories=${restaurantType}&price=${price}`) 
+      : restaurantType ? await fetch(`${url}&categories=${restaurantType}`) 
+      : price ? await fetch(`${url}&price=${price}`) 
+      : await fetch(url) 
+    }
+    decideFetch().then(response => response.json())
+      .then(data => checkIfCancelled(data))
+      .catch(error => [setFetchFail(true), setLoader(false)])
   }
 
   useEffect(() => {

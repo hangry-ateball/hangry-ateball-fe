@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
+import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
 const ResultScreen = ({route}) => {
@@ -37,10 +38,24 @@ const ResultScreen = ({route}) => {
     return () => {
       isCancelled.current = true;
     };
-  }, [])
+  }, [])    
 
   const goToRestaurant = () => {
     openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: {travelType}, end: `${restaurant.name}`  });
+  }
+
+  const updatePreviousRestaurants = async () => {
+    try {
+      let previous = await fetchPreviousRestaurants();
+      previous = mergePreviousRestaurants(previous, restaurant);
+      savePreviousRestaurants(previous);
+    } catch (error) {
+      console.log('Error fetching Previous', error);
+    }
+  }
+
+  if(restaurant.name) {
+    updatePreviousRestaurants()
   }
 
   return (

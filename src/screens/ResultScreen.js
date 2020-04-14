@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator } from 'react-native'
 import { Button } from 'react-native-paper'
+import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
+import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
 const ResultScreen = ({route}) => {
@@ -15,7 +16,7 @@ const ResultScreen = ({route}) => {
   const [restaurant, setRestaurant] = useState({});
 
   const fetchRestaurant = (userLocation, restaurantType, price) => {
-    const url = `https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+    const url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
     const checkIfCancelled = (data) => {
       if (!isCancelled.current) {
         setRestaurant(data.data.attributes)
@@ -38,10 +39,24 @@ const ResultScreen = ({route}) => {
     return () => {
       isCancelled.current = true;
     };
-  }, [])
+  }, [])    
 
   const goToRestaurant = () => {
     openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: {travelType}, end: `${restaurant.name}`  });
+  }
+
+  const updatePreviousRestaurants = async () => {
+    try {
+      let previous = await fetchPreviousRestaurants();
+      previous = mergePreviousRestaurants(previous, restaurant);
+      savePreviousRestaurants(previous);
+    } catch (error) {
+      console.log('Error fetching Previous', error);
+    }
+  }
+
+  if(restaurant.name) {
+    updatePreviousRestaurants()
   }
 
   return (
@@ -60,7 +75,7 @@ const ResultScreen = ({route}) => {
           <View>
             <Text style={styles.details}>{restaurant.price}</Text>
             <Text style={styles.details}>Rating: {restaurant.rating}</Text>
-            <Text style={styles.details}>{restaurant.display_phone}</Text>
+            <Text style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
             <Text style={styles.details}>{restaurant.location}</Text>
           </View>
           <View style={styles.imgContainer}>

@@ -1,170 +1,78 @@
-import React from 'react'
-import { StyleSheet, View, ScrollView, Text } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { StyleSheet, View, ScrollView, Text, ActivityIndicator, RefreshControl } from 'react-native'
+import { fetchPreviousRestaurants } from '../asyncStorageHelper'
 
-const mockData = [
-  {
-    name: 'Outback ste...',
-    price: '$$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-  {
-    name: 'Casa Bonita',
-    price: '$$$',
-    rating: '4.5'
-  },
-  {
-    name: 'Wendys',
-    price: '$',
-    rating: '2.1',
-  },
-  {
-    name: 'McDonalds',
-    price: '$',
-    rating: '0.8',
-  },
-]
 
-const PrevTab = () =>
-  <View style={styles.container}>
+
+const PrevTab = () => {
+  const [isLoading, setLoader] = useState(true);
+  const [previous, setPrevious] = useState(true);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => [setRefreshing(false), loadPreviousRestaurants()]);
+  }, [refreshing]);
+
+
+  loadPreviousRestaurants = async () => {
+    try {
+      let allPrevious = await fetchPreviousRestaurants();
+      setPrevious(allPrevious)
+      setLoader(false)
+      return allPrevious
+    } catch (error) {
+      console.log('Error fetching Previous', error);
+    }
+  }
+
+  useEffect(() => {
+    loadPreviousRestaurants()
+  }, [])
+
+  return (
+    <View style={styles.container}>
       <Text style={styles.title}>Previous</Text>
-      <ScrollView showsVerticalScrollIndicator={false}>
-      {mockData.length === 0 
-        ? 
-          <View style={styles.noPrevious}>
-            <Text style={{fontSize: 25}}>You don't have any previous 🥺</Text>
-          </View>
-        :
-        mockData.map(restaurant => {
-          return <View style={styles.previous}>
-                  <View style={styles.name}>
-                    <Text style={styles.text}>{restaurant.name}</Text>
-                  </View>
-                  <View style={styles.info}> 
-                    <Text style={styles.text}>⭐️{restaurant.rating}</Text> 
-                  </View>
-                  <View style={styles.info}> 
-                    <Text style={styles.price}>{restaurant.price}</Text> 
-                  </View>
-                  </View>
-        })}
+      <ScrollView
+        // contentContainerStyle={styles.scrollView}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+      {isLoading ? <ActivityIndicator size='large' color='blue'/> : 
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+          {previous.length === 0 
+            ? 
+            <View style={styles.noPrevious}>
+                <Text style={{fontSize: 25}}>You don't have any previous 🥺</Text>
+              </View>
+            :
+            previous.reverse().map(restaurant => {
+              return <View style={styles.previous}>
+                        <View style={styles.name}>
+                          <Text style={styles.text}>{restaurant.name.length > 11 ? restaurant.name.slice(0, 11) + '...':restaurant.name}</Text>
+                        </View>
+                        <View style={styles.info}> 
+                          <Text style={styles.text}>⭐️{restaurant.rating}</Text> 
+                        </View>
+                        <View style={styles.info}> 
+                          <Text style={styles.price}>{restaurant.price}</Text> 
+                        </View>
+                      </View>
+            })}
+          </ScrollView>
+        </>
+      }
       </ScrollView>
-  </View>
-
+    </View>
+  )
+}
 const styles = StyleSheet.create({
   noPrevious: {
     paddingTop: 20,

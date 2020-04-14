@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'react-native-paper'
-import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
+import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
 import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
@@ -14,9 +14,12 @@ const ResultScreen = ({route}) => {
   const [fetchFailed, setFetchFail] = useState(false);
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
-
-  const fetchRestaurant = (userLocation, restaurantType, price) => {
-    const url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+  
+  const fetchRestaurant = (userLocation, enteredAddress, restaurantType, price) => {
+    let url;
+    userLocation.latitude ?  
+    url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+    : url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?address=${enteredAddress}`
     const checkIfCancelled = (data) => {
       if (!isCancelled.current) {
         setRestaurant(data.data.attributes)

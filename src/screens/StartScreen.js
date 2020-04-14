@@ -1,15 +1,19 @@
 import React from 'react'
-import { StyleSheet, View, Button, Image } from 'react-native'
+import { StyleSheet, View, Image, Text } from 'react-native'
+import { Button } from 'react-native-paper'
 
 const StartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.eightBall} source={require('../../assets/ate-ball-home.png')}/>
+      <Image style={styles.eightBall} source={require('../../assets/logo.png')}/>
       <View style={styles.startBtn}>
         <Button
-          title="Get Shakin'"
+          mode="contained"
+          color='#f9e000'
           onPress={() => navigation.navigate('Form')}
-        />
+        >
+          <Text style={{color: "#000065"}}>Get Shakin'</Text>
+        </Button>
       </View>
     </View>
   );
@@ -17,9 +21,10 @@ const StartScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop: 50,
     alignItems: 'center',
     width: '100%',
+    height: '100%',
+    backgroundColor: '#000065'
   },
   startBtn: {
     width: '80%',

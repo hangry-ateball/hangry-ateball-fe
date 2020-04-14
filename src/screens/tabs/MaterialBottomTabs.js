@@ -13,7 +13,8 @@ export const createBottomTabs = () => {
     <MaterialBottomTabs.Navigator
       initialRouteName="Home"
       activeColor="white"
-      inactiveColor="lightgrey"
+      inactiveColor="#a0a0a0"
+      barStyle={{ backgroundColor: '#211a1f' }}
     >
       <MaterialBottomTabs.Screen 
         name="Previous" 

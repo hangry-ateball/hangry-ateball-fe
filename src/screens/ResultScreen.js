@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
+import { Button } from 'react-native-paper'
+import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
 import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
@@ -61,58 +62,63 @@ const ResultScreen = ({route}) => {
   return (
     <View style={styles.resultContainer}>
       {isLoading ? <ActivityIndicator size='large' color='blue'/> : fetchFailed ? 
-        <View style={{alignItems: 'center', paddingTop: '50%'}}>
+        <View style={styles.errorContainer}>
           <Text style={styles.errorText}>😰Uh Oh😰</Text>
           <Text style={styles.errorText}>Something went wrong...</Text>
           <Text style={styles.errorText}>Please try again!</Text>
         </View>
         :
-        <>
+        <View style={styles.content}>
           <View style={styles.titleView}>
             <Text style={styles.title}>{restaurant.name}</Text>
           </View>
           <View>
-            <Text>{restaurant.price}</Text>
-            <Text>Rating: {restaurant.rating}</Text>
-            <Text onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
-            <Text>{restaurant.location}</Text>
+            <Text style={styles.details}>{restaurant.price}</Text>
+            <Text style={styles.details}>Rating: {restaurant.rating}</Text>
+            <Text style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
+            <Text style={styles.details}>{restaurant.location}</Text>
           </View>
-          <Button
-            onPress={goToRestaurant}
-            title='Lets go'
-          />
-          <ScrollView 
-            showsHorizontalScrollIndicator={false} 
-            horizontal={true} 
-            style={{width: '100%'}}
-          >
-            <View style={styles.imgContainer}>
-              {
-                restaurant.photos.map((photo, i) => {
-                return <Image
-                          key={'img' + i}
-                          style={styles.restaurantImg} 
-                          source={{ uri: photo }}
-                        />
-                })
-              }
+          <View style={styles.imgContainer}>
+            {
+              restaurant.photos.map((photo, i) => {
+              return <View style={styles.shadow}><Image
+                        key={'img' + i}
+                        style={styles.restaurantImg} 
+                        source={{ uri: photo }}
+                      /></View>
+              })
+            }
+          </View>
+          <View style={styles.btnContainer}>
+            <View style={styles.letsGoBtn}>
+              <Button
+                mode='contained'
+                color='#fff' 
+                onPress={goToRestaurant}
+              >
+                <Text style={{color: "#000065"}}>Let's Go!</Text>
+              </Button>
             </View>
-          </ScrollView>
-          <View>
             <View style={styles.shareBtn}>
-              <Button title="Send to Friends"/>
-            </View>
-            <View style={styles.shakeAgainBtn}>
-              <Button color='darkblue' title="Shake "/>
+              <Button
+                mode='contained'
+                color='#f9e000'
+              >
+                <Text style={{color: "#000065"}}>Send to Friends</Text>
+              </Button>
             </View>
           </View>
-        </>
+        </View>
       }
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  errorContainer: {
+    alignItems: 'center', 
+    paddingTop: '50%'
+  },
   errorText: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -120,34 +126,76 @@ const styles = StyleSheet.create({
   resultContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#000065',
+    width: '100%',
+    height: '100%'
+  },
+  content: {
+    width: '100%', 
+    height: '100%'
   },
   titleView: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    borderBottomWidth: 1,
+    borderColor: 'white',
+    marginVertical: 30,
+    width: "70%"
   },
   title: {
-    fontSize: 36,
-    padding: 20,
+    textAlign: 'center',
+    fontSize: 28,
+    paddingVertical: 10,
+    color: 'white',
+    fontWeight: "bold"
+  },
+  details: {
+    fontSize: 16,
+    color: 'white',
+    paddingHorizontal: '10%'
   },
   imgContainer: {
+    width: '100%',
+    height: 140,
     flexDirection: 'row', 
-    borderTopWidth: 2, 
-    borderBottomWidth: 2, 
-    marginVertical: 40, 
-    paddingVertical: 10
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1, 
+    borderBottomWidth: 1, 
+    marginVertical: 30, 
+    paddingVertical: 3,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2, 
   },
   restaurantImg: {
-    margin: 10, 
-    width: 118, 
-    height: 100,
-    resizeMode : 'stretch' 
+    margin: 5, 
+    height: '90%',
+    resizeMode: 'stretch',
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 2, 
+    width: '34%'
+  },
+  btnContainer: {
+    width: '100%', 
+    height: '30%', 
+    display: 'flex', 
+    alignItems: 'center'
+  },
+  letsGoBtn: {
+    marginTop: 20,
+    width: '80%'
   },
   shareBtn: {
     paddingTop: 30,
     margin: 20,
+    width: '80%'
   },
-  shakeAgainBtn: {
-    margin: 20,
-  }
 })
 
 export default ResultScreen

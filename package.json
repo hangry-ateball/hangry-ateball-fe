@@ -11,13 +11,14 @@
     "test": "start-server-and-test start http://localhost:3030 cy:run"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.9.0",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/material-bottom-tabs": "^5.1.7",
     "@react-navigation/native": "^5.1.4",
     "@react-navigation/stack": "^5.2.9",
     "expo": "~37.0.3",
     "react": "~16.9.0",
-    "react-hook-form": "^5.4.0",
+    "react-hook-form": "^5.4.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-open-maps": "^0.3.5",

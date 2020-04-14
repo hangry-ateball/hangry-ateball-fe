@@ -74,7 +74,7 @@ const ResultScreen = ({route}) => {
           <View>
             <Text>{restaurant.price}</Text>
             <Text>Rating: {restaurant.rating}</Text>
-            <Text onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.phone.slice(2, -1)}</Text>
+            <Text onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
             <Text>{restaurant.location}</Text>
           </View>
           <Button

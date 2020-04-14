@@ -15,7 +15,7 @@ const ResultScreen = ({route}) => {
   const [restaurant, setRestaurant] = useState({});
 
   const fetchRestaurant = (userLocation, restaurantType, price) => {
-    const url = `https://hangry-ateball-staging.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+    const url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
     const checkIfCancelled = (data) => {
       if (!isCancelled.current) {
         setRestaurant(data.data.attributes)

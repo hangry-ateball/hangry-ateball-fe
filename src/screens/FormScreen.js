@@ -22,7 +22,12 @@ const FormScreen = ({ navigation }) => {
   findUserCoordinates()
 
   const renderCategories = categoryList => {
-    return categoryList.map(category => <Picker.Item label={category.name} value={category.value}/>)
+    return categoryList.map(category => 
+      <Picker.Item 
+        key={category.value} 
+        label={category.name} 
+        value={category.value}
+      />)
   }
 
   const renderManualInput = () => {

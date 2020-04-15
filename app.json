@@ -23,6 +23,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "This app helps you find a place to eat!",
+    "githubUrl": "https://github.com/hangry-ateball"
   }
 }

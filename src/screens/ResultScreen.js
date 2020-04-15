@@ -3,7 +3,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Button } from 'react-native-paper'
 import { StyleSheet, View, Text, Image, TouchableOpacity, Linking, Animated } from 'react-native'
 import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
+
 import openMap from 'react-native-open-maps';
+import ContactsModal from '../components/ContactsModal'
+import { getContacts } from '../contactsHelper'
 
 const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
@@ -17,7 +20,8 @@ const ResultScreen = ({route}) => {
   const [restaurant, setRestaurant] = useState({});
   const [favorite, setFavorite] = useState(false);
   const [shake] = useState(new Animated.Value(0));
-
+  const [showContacts, setShowContacts] = useState(false)
+  
   const checkFavoriteStatus = async () => {
     try {
       let favorites = await fetchRestaurants('favorite');
@@ -31,8 +35,11 @@ const ResultScreen = ({route}) => {
     }
   }
 
-  const fetchRestaurant = (userLocation, restaurantType, price) => {
-    const url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+  const fetchRestaurant = (userLocation, enteredAddress, restaurantType, price) => {
+    let url;
+    userLocation.latitude ?  
+    url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
+    : url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?address=${enteredAddress}`
     const checkIfCancelled = (data) => {
       if (!isCancelled.current) {
         setRestaurant(data.data.attributes)
@@ -121,13 +128,11 @@ const ResultScreen = ({route}) => {
           <View style={styles.imgContainer}>
             {
               restaurant.photos.map((photo, i) => {
-              return <View style={styles.shadow}>
-                        <Image
-                          key={'img' + i}
-                          style={styles.restaurantImg} 
-                          source={{ uri: photo }}
-                        />
-                      </View>
+              return <View key={'img' + i} style={styles.shadow}><Image
+                        key={'img' + i}
+                        style={styles.restaurantImg} 
+                        source={{ uri: photo }}
+                      /></View>
               })
             }
           </View>
@@ -145,9 +150,17 @@ const ResultScreen = ({route}) => {
               <Button
                 mode='contained'
                 color='#f9e000'
+                onPress={() => {
+                  setShowContacts(true)}}
               >
                 <Text style={{color: "#000065"}}>Send to Friends</Text>
               </Button>
+              <ContactsModal 
+                visible={showContacts} 
+                getContacts={getContacts} 
+                message={`${restaurant.name} at ${restaurant.location}`}
+                closeModal={() => setShowContacts(false)}
+              />
             </View>
           </View>
         </View>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ContactCard from './ContactCard'
-import { View, TextInput, StyleSheet, Modal, ScrollView } from 'react-native'
+import { View, TextInput, StyleSheet, Modal, ScrollView, Text, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { searchContacts } from '../contactsHelper'
 
 const ContactsModal = (props) =>{
@@ -31,12 +32,20 @@ const ContactsModal = (props) =>{
   return (
     <Modal visible={props.visible} animationType="slide">
       <View style={styles.contactsContainer}>
-        <TextInput
-          placeholder="Search"
-          placeholderTextColor="#dddddd"
-          style={styles.input}
-          onChangeText={value => searchContacts(value, inMemoryContacts, setContacts)}
-        />
+        <View style={styles.inputRow}>
+          <TextInput
+            placeholder="Search"
+            placeholderTextColor="#dddddd"
+            style={styles.input}
+            onChangeText={value => searchContacts(value, inMemoryContacts, setContacts)}
+          />
+          <TouchableOpacity style={styles.closeModal} onPress={() => closeModalHandler()}>
+          <Icon 
+              style={[{ height: 50, width: 40 }]} 
+              size={40} 
+              name={'window-close'} />
+          </TouchableOpacity>
+        </View>
         <ScrollView style={styles.scrollView}>
           {contacts ? appendCards(contacts) : inMemoryContacts._55 ? appendCards(inMemoryContacts._55) : null}
         </ScrollView>
@@ -51,23 +60,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 50,
-    width: '100%'
+    width: '100%',
+    backgroundColor: '#808080'
   },
+  inputRow: {
+    display: 'flex', 
+    flexDirection: 'row', 
+    width: '100%'},
   input: {
     backgroundColor: '#2f363c',
     height: 60,
     fontSize: 24,
-    padding: 20,
+    padding: 15,
     color: 'white',
     borderBottomWidth: 0.5,
     borderBottomColor: '#7d90a0',
-    width: '100%'
+    width: '85%'
   },
   scrollView: {
     flex: 1, 
     width: '100%', 
     backgroundColor: '#000065'
-  }
+  },
+  closeModal: {
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    width: '15%', 
+    height: 60}
 });
 
 export default ContactsModal

@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontWeight: 'bold',
     fontSize: 20,
+    color: 'white'
   },
   resultContainer: {
     justifyContent: 'center',

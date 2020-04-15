@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { StyleSheet, View, ScrollView, Text, ActivityIndicator, RefreshControl } from 'react-native'
-import { fetchRestaurants } from '../asyncStorageHelper'
+import { StyleSheet, View, ScrollView, Text, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native'
+import { fetchRestaurants, clearAllPrevious } from '../asyncStorageHelper'
 
 const PrevTab = () => {
   const [isLoading, setLoader] = useState(true);
@@ -36,7 +36,20 @@ const PrevTab = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Previous</Text>
+      <View style={styles.topBar}>
+      <View style={styles.spaceHolder}>
+      </View>
+        <View style={styles.title}>
+          <Text style={{color: '#f9e000', fontSize: 40, fontWeight: 'bold'}} >Previous</Text>
+        </View>
+        <View style={styles.spaceHolder}>
+          <TouchableOpacity style={styles.clearAllBtnTouch} onPress={() => [clearAllPrevious(), setTimeout(() => loadPreviousRestaurants(), 500)]}>
+            <View style={styles.clearAllBtn}>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>Clear</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor='#ffffff'/>}
       >
@@ -71,6 +84,17 @@ const PrevTab = () => {
 }
 
   const styles = StyleSheet.create({
+  topBar: {
+    width: '92%',
+    justifyContent: 'space-between',
+    alignItems: 'center', 
+    paddingTop: 50,
+    flexDirection: 'row',
+    height: '15%',
+  },
+  spaceHolder: {
+    width: 80,
+  },
   noFavorites: {
     paddingTop: 20,
   },
@@ -81,11 +105,8 @@ const PrevTab = () => {
     backgroundColor: '#000065'
   },
   title: {
-    color: '#f9e000',
-    fontSize: 40,
-    fontWeight: 'bold',
-    paddingTop: '15%',
-    paddingBottom: '5%',
+    width: 175,
+    alignItems: 'center',
   },
   name: {
     alignItems: 'flex-start',
@@ -116,10 +137,6 @@ const PrevTab = () => {
     fontWeight: 'bold',
     color: '#000065',
   },
-  price: {
-    fontWeight: 'bold',
-    color: 'lightgreen',
-  },
   previous: {
     justifyContent: 'center',
     flex: 1, 
@@ -127,10 +144,23 @@ const PrevTab = () => {
     width: '100%', 
     alignSelf: 'center',
     marginVertical: 5,
-    backgroundColor: 'gray',
     borderRadius: 4,
     padding: 10,
     backgroundColor: 'white',
+  },
+  clearAllBtn: {
+    alignSelf: 'center',
+    marginTop: 4,
+    borderRadius: 4,
+    backgroundColor: '#808080',
+    height: 40,
+    width: 70,
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  clearAllBtnTouch: {
+    height: 40,
+    width: 75,
   }
 })
 

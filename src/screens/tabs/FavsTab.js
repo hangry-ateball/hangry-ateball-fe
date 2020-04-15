@@ -19,7 +19,7 @@ const FavTab = () => {
     wait(2000).then(() => [setRefreshing(false), loadFavoriteRestaurants()]);
   }, [refreshing]);
 
-  loadFavoriteRestaurants = async () => {
+  const loadFavoriteRestaurants = async () => {
     try {
       let allFavorites = await fetchRestaurants('favorite');
       setFavorites(allFavorites)
@@ -46,11 +46,11 @@ const FavTab = () => {
             {favorites.length === 0 
               ? 
               <View style={styles.noFavorites}>
-                  <Text style={{fontSize: 25, color: 'white'}}>You don't have any favorites 🥺</Text>
+                  <Text testID='noFavoritesMsg' style={{fontSize: 25, color: 'white'}}>You don't have any favorites 🥺</Text>
               </View>
               :
               favorites.reverse().map(restaurant => {
-                return <View style={styles.favorites}>
+                return <View testID='favoriteRestaurant' style={styles.favorites}>
                           <View style={styles.name}>
                             <Text style={styles.text}>{restaurant.name.length > 9 ? restaurant.name.slice(0, 9) + '...':restaurant.name}</Text>
                           </View>

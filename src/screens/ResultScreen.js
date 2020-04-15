@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'react-native-paper'
-import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking, Alert } from 'react-native'
+import { StyleSheet, View, Text, Image, ActivityIndicator, Linking, Alert } from 'react-native'
 import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
+import ContactsModal from '../components/ContactsModal'
+import { getContacts } from '../contactsHelper'
 
 const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
@@ -14,6 +16,7 @@ const ResultScreen = ({route}) => {
   const [fetchFailed, setFetchFail] = useState(false);
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
+  const [showContacts, setShowContacts] = useState(false)
   
   const fetchRestaurant = (userLocation, enteredAddress, restaurantType, price) => {
     let url;
@@ -84,7 +87,7 @@ const ResultScreen = ({route}) => {
           <View style={styles.imgContainer}>
             {
               restaurant.photos.map((photo, i) => {
-              return <View style={styles.shadow}><Image
+              return <View key={'img' + i} style={styles.shadow}><Image
                         key={'img' + i}
                         style={styles.restaurantImg} 
                         source={{ uri: photo }}
@@ -106,9 +109,17 @@ const ResultScreen = ({route}) => {
               <Button
                 mode='contained'
                 color='#f9e000'
+                onPress={() => {
+                  setShowContacts(true)}}
               >
                 <Text style={{color: "#000065"}}>Send to Friends</Text>
               </Button>
+              <ContactsModal 
+                visible={showContacts} 
+                getContacts={getContacts} 
+                message={`${restaurant.name} at ${restaurant.location}`}
+                closeModal={() => setShowContacts(false)}
+              />
             </View>
           </View>
         </View>

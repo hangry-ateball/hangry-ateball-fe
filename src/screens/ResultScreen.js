@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'react-native-paper'
-import { StyleSheet, View, Text, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
-import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
+import { StyleSheet, View, Text, Image, TouchableOpacity, ActivityIndicator, Linking } from 'react-native'
+import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
 const ResultScreen = ({route}) => {
@@ -14,6 +14,20 @@ const ResultScreen = ({route}) => {
   const [fetchFailed, setFetchFail] = useState(false);
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
+  const [favorite, setFavorite] = useState(false);
+
+  const checkFavoriteStatus = async () => {
+    try {
+      let favorites = await fetchRestaurants('favorite');
+      favorites.forEach(favRestaurant => {
+        if(favRestaurant.name === restaurant.name) {
+          return setFavorite(true)
+        }
+      })
+    } catch {
+      console.log('Error checking favorites', error);
+    }
+  }
 
   const fetchRestaurant = (userLocation, restaurantType, price) => {
     const url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`
@@ -38,25 +52,25 @@ const ResultScreen = ({route}) => {
     fetchRestaurant(userLocation, restaurantType, cost)
     return () => {
       isCancelled.current = true;
-    };
-  }, [])    
+    }
+  }, [])
 
   const goToRestaurant = () => {
-    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: {travelType}, end: `${restaurant.name}`  });
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: `${travelType}`, end: `${restaurant.name}`  });
   }
 
-  const updatePreviousRestaurants = async () => {
-    try {
-      let previous = await fetchPreviousRestaurants();
-      previous = mergePreviousRestaurants(previous, restaurant);
-      savePreviousRestaurants(previous);
-    } catch (error) {
-      console.log('Error fetching Previous', error);
+  const favoriteToggle = () => {
+    setFavorite(favorite ? false:true)
+    if(!favorite) {
+      addFavoriteRestaurant(restaurant)
+    } else {
+      unFavoriteRestaurant(restaurant)
     }
   }
 
   if(restaurant.name) {
-    updatePreviousRestaurants()
+    updatePreviousRestaurants(restaurant)
+    setTimeout(() => checkFavoriteStatus(), 1)
   }
 
   return (
@@ -69,6 +83,11 @@ const ResultScreen = ({route}) => {
         </View>
         :
         <View style={styles.content}>
+          <View style={styles.favContainer}>
+            <TouchableOpacity style={styles.favTouch} onPress={() => favoriteToggle()}>
+              <Image style={styles.favIcon} source={favorite ? require('../../assets/favorite.png'):require('../../assets/unfavorite.png')}/>
+            </TouchableOpacity>
+          </View>
           <View style={styles.titleView}>
             <Text style={styles.title}>{restaurant.name}</Text>
           </View>
@@ -81,11 +100,13 @@ const ResultScreen = ({route}) => {
           <View style={styles.imgContainer}>
             {
               restaurant.photos.map((photo, i) => {
-              return <View style={styles.shadow}><Image
-                        key={'img' + i}
-                        style={styles.restaurantImg} 
-                        source={{ uri: photo }}
-                      /></View>
+              return <View style={styles.shadow}>
+                        <Image
+                          key={'img' + i}
+                          style={styles.restaurantImg} 
+                          source={{ uri: photo }}
+                        />
+                      </View>
               })
             }
           </View>
@@ -115,6 +136,19 @@ const ResultScreen = ({route}) => {
 }
 
 const styles = StyleSheet.create({
+  favIcon: {
+    height: 70,
+    width: 40
+  },
+  favTouch: {
+    height: 70,
+    width: 40,
+  },
+  favContainer: {
+    paddingRight: 10,
+    alignSelf: 'flex-end',
+    height: '0%',
+  },
   errorContainer: {
     alignItems: 'center', 
     paddingTop: '50%'
@@ -188,11 +222,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   letsGoBtn: {
-    marginTop: 20,
+    marginTop: 10,
     width: '80%'
   },
   shareBtn: {
-    paddingTop: 30,
+    paddingTop: 10,
     margin: 20,
     width: '80%'
   },

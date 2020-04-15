@@ -41,7 +41,7 @@ export const createBottomTabs = () => {
               style={[{ height: 50, width: 40 }]} 
               color={color} 
               size={40} 
-              name={'numeric-8-circle'} />
+              name={'alpha-a-circle'} />
           ),
         }}
       />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'react-native-paper'
-import { StyleSheet, View, Text, Image, ActivityIndicator, Linking, Alert } from 'react-native'
-import { fetchPreviousRestaurants, mergePreviousRestaurants, savePreviousRestaurants } from './asyncStorageHelper'
+import { StyleSheet, View, Text, Image, TouchableOpacity, Linking, Animated } from 'react-native'
+import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 import ContactsModal from '../components/ContactsModal'
 import { getContacts } from '../contactsHelper'
@@ -10,14 +10,29 @@ const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
   const { enteredAddress } = route.params;
   const { restaurantType } = route.params;
-  const { cost } = route.params;
+  const { price } = route.params;
   const { travelType } = route.params;
   const isCancelled = useRef(false);
   const [fetchFailed, setFetchFail] = useState(false);
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
+  const [favorite, setFavorite] = useState(false);
+  const [shake] = useState(new Animated.Value(0));
   const [showContacts, setShowContacts] = useState(false)
   
+  const checkFavoriteStatus = async () => {
+    try {
+      let favorites = await fetchRestaurants('favorite');
+      favorites.forEach(favRestaurant => {
+        if(favRestaurant.name === restaurant.name) {
+          return setFavorite(true)
+        }
+      })
+    } catch {
+      console.log('Error checking favorites', error);
+    }
+  }
+
   const fetchRestaurant = (userLocation, enteredAddress, restaurantType, price) => {
     let url;
     userLocation.latitude ?  
@@ -40,34 +55,53 @@ const ResultScreen = ({route}) => {
       .catch(error => [setFetchFail(true), setLoader(false)])
   }
 
-  useEffect(() => {
-    fetchRestaurant(userLocation, restaurantType, cost)
-    return () => {
-      isCancelled.current = true;
-    };
-  }, [])    
-
-  const goToRestaurant = () => {
-    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: {travelType}, end: `${restaurant.name}`  });
+  const startShake = () => {
+    Animated.sequence([
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 0, duration: 25, useNativeDriver: true }),
+    ]).start();
   }
 
-  const updatePreviousRestaurants = async () => {
-    try {
-      let previous = await fetchPreviousRestaurants();
-      previous = mergePreviousRestaurants(previous, restaurant);
-      savePreviousRestaurants(previous);
-    } catch (error) {
-      console.log('Error fetching Previous', error);
+  useEffect(() => {
+    startShake()
+    fetchRestaurant(userLocation, enteredAddress, restaurantType, price)
+    return () => {
+      isCancelled.current = true;
+    }
+  }, [])
+
+  const goToRestaurant = () => {
+    openMap({ provider: Platform.OS === 'ios' ? 'apple':'google', start: 'my location', travelType: `${travelType}`, end: `${restaurant.name}`  });
+  }
+
+  const favoriteToggle = () => {
+    setFavorite(favorite ? false:true)
+    if(!favorite) {
+      addFavoriteRestaurant(restaurant)
+    } else {
+      unFavoriteRestaurant(restaurant)
     }
   }
 
   if(restaurant.name) {
-    updatePreviousRestaurants()
+    updatePreviousRestaurants(restaurant)
+    setTimeout(() => checkFavoriteStatus(), 1)
   }
 
   return (
     <View style={styles.resultContainer}>
-      {isLoading ? <ActivityIndicator size='large' color='blue'/> : fetchFailed ? 
+      {isLoading ? 
+      <Animated.Image source={require('../../assets/magic-loader-img.png')}
+        resizeMode='contain'
+        style={{ transform: [{translateX: shake}] }}
+      />
+      : 
+      fetchFailed ? 
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>😰Uh Oh😰</Text>
           <Text style={styles.errorText}>Something went wrong...</Text>
@@ -75,13 +109,18 @@ const ResultScreen = ({route}) => {
         </View>
         :
         <View style={styles.content}>
+          <View style={styles.favContainer}>
+            <TouchableOpacity style={styles.favTouch} onPress={() => favoriteToggle()}>
+              <Image style={styles.favIcon} source={favorite ? require('../../assets/favorite.png'):require('../../assets/unfavorite.png')}/>
+            </TouchableOpacity>
+          </View>
           <View style={styles.titleView}>
-            <Text style={styles.title}>{restaurant.name}</Text>
+            <Text testID="title" style={styles.title}>{restaurant.name}</Text>
           </View>
           <View>
             <Text style={styles.details}>{restaurant.price}</Text>
             <Text style={styles.details}>Rating: {restaurant.rating}</Text>
-            <Text style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
+            <Text testID='phoneNumber' style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
             <Text style={styles.details}>{restaurant.location}</Text>
           </View>
           <View style={styles.imgContainer}>
@@ -101,6 +140,7 @@ const ResultScreen = ({route}) => {
                 mode='contained'
                 color='#fff' 
                 onPress={goToRestaurant}
+                testID="Lets Go!"
               >
                 <Text style={{color: "#000065"}}>Let's Go!</Text>
               </Button>
@@ -111,6 +151,7 @@ const ResultScreen = ({route}) => {
                 color='#f9e000'
                 onPress={() => {
                   setShowContacts(true)}}
+                  testID="Send to Friends"
               >
                 <Text style={{color: "#000065"}}>Send to Friends</Text>
               </Button>
@@ -129,6 +170,19 @@ const ResultScreen = ({route}) => {
 }
 
 const styles = StyleSheet.create({
+  favIcon: {
+    height: 70,
+    width: 40
+  },
+  favTouch: {
+    height: 70,
+    width: 40,
+  },
+  favContainer: {
+    paddingRight: 10,
+    alignSelf: 'flex-end',
+    height: '0%',
+  },
   errorContainer: {
     alignItems: 'center', 
     paddingTop: '50%'
@@ -136,6 +190,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontWeight: 'bold',
     fontSize: 20,
+    color: 'white'
   },
   resultContainer: {
     justifyContent: 'center',
@@ -202,11 +257,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   letsGoBtn: {
-    marginTop: 20,
+    marginTop: 10,
     width: '80%'
   },
   shareBtn: {
-    paddingTop: 30,
+    paddingTop: 10,
     margin: 20,
     width: '80%'
   },

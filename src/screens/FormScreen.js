@@ -7,7 +7,7 @@ import { categoryList } from '../categoryList'
 const FormScreen = ({ navigation }) => {
   const [restaurantType, setRestaurantType] = useState(null)
   const [travelType, setTravelType] = useState('')
-  const [cost, setCost] = useState(null)
+  const [price, setPrice] = useState(null)
   const [userLocation, setUserLocation] = useState({})
   const [enteredAddress, setEnteredAddress] = useState("")
   const { control, handleSubmit, errors } = useForm()
@@ -67,13 +67,13 @@ const FormScreen = ({ navigation }) => {
         </Picker>
       </View>
       <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Cost</Text>
+        <Text style={styles.label}>Price</Text>
         <Picker
           itemStyle={{height: 88, color: 'white'}}
           style={{height: 88, color: 'white'}}
-          selectedValue={cost}
-          onValueChange={cost => setCost(cost)}
-          testID="Cost"
+          selectedValue={price}
+          onValueChange={price => setPrice(price)}
+          testID="Price"
         >
           <Picker.Item label="Any" value=""/>
           <Picker.Item label="$" value="1"/>
@@ -103,7 +103,7 @@ const FormScreen = ({ navigation }) => {
             userLocation: userLocation,
             enteredAddress: enteredAddress,
             restaurantType: restaurantType,
-            cost: cost,
+            price: price,
             travelType: travelType,
           }))}
         >

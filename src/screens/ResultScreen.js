@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Button } from 'react-native-paper'
 import { StyleSheet, View, Text, Image, TouchableOpacity, Linking, Animated } from 'react-native'
 import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
-
 import openMap from 'react-native-open-maps';
 import ContactsModal from '../components/ContactsModal'
 import { getContacts } from '../contactsHelper'
@@ -12,7 +10,7 @@ const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
   const { enteredAddress } = route.params;
   const { restaurantType } = route.params;
-  const { cost } = route.params;
+  const { price } = route.params;
   const { travelType } = route.params;
   const isCancelled = useRef(false);
   const [fetchFailed, setFetchFail] = useState(false);
@@ -71,7 +69,7 @@ const ResultScreen = ({route}) => {
 
   useEffect(() => {
     startShake()
-    fetchRestaurant(userLocation, restaurantType, cost)
+    fetchRestaurant(userLocation, enteredAddress, restaurantType, price)
     return () => {
       isCancelled.current = true;
     }
@@ -117,12 +115,12 @@ const ResultScreen = ({route}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.titleView}>
-            <Text style={styles.title}>{restaurant.name}</Text>
+            <Text testID="title" style={styles.title}>{restaurant.name}</Text>
           </View>
           <View>
             <Text style={styles.details}>{restaurant.price}</Text>
             <Text style={styles.details}>Rating: {restaurant.rating}</Text>
-            <Text style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
+            <Text testID='phoneNumber' style={styles.details} onPress={ () => Linking.openURL(`tel: + ${restaurant.phone}`)}>Call: {restaurant.display_phone}</Text>
             <Text style={styles.details}>{restaurant.location}</Text>
           </View>
           <View style={styles.imgContainer}>
@@ -142,6 +140,7 @@ const ResultScreen = ({route}) => {
                 mode='contained'
                 color='#fff' 
                 onPress={goToRestaurant}
+                testID="Lets Go!"
               >
                 <Text style={{color: "#000065"}}>Let's Go!</Text>
               </Button>
@@ -152,6 +151,7 @@ const ResultScreen = ({route}) => {
                 color='#f9e000'
                 onPress={() => {
                   setShowContacts(true)}}
+                  testID="Send to Friends"
               >
                 <Text style={{color: "#000065"}}>Send to Friends</Text>
               </Button>

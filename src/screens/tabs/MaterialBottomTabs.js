@@ -21,6 +21,7 @@ export const createBottomTabs = () => {
         component={PrevTab}
         options={{
           tabBarLabel: '',
+          tabBarTestID: 'previousTab',
           tabBarIcon: ({ color }) => (
             <Icon 
               style={[{ height: 50, width: 40 }]} 
@@ -36,6 +37,7 @@ export const createBottomTabs = () => {
         component={HomeTab}
         options={{
           tabBarLabel: '',
+          tabBarTestID: 'homeTab',
           tabBarIcon: ({ color }) => (
             <Icon 
               style={[{ height: 50, width: 40 }]} 
@@ -50,6 +52,7 @@ export const createBottomTabs = () => {
         component={FavsTab}
         options={{
           tabBarLabel: '',
+          tabBarTestID: 'favoritesTab',
           tabBarIcon: ({ color }) => (
             <Icon 
             style={[{ height: 50, width: 40 }]} 

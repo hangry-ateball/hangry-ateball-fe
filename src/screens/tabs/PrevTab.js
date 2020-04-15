@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, View, ScrollView, Text, ActivityIndicator, RefreshControl } from 'react-native'
-import { fetchPreviousRestaurants } from '../asyncStorageHelper'
-
-
+import { fetchRestaurants } from '../asyncStorageHelper'
 
 const PrevTab = () => {
   const [isLoading, setLoader] = useState(true);
   const [previous, setPrevious] = useState(true);
-
   const [refreshing, setRefreshing] = useState(false);
 
-  function wait(timeout) {
+  const wait = (timeout) => {
     return new Promise(resolve => {
       setTimeout(resolve, timeout);
     });
@@ -21,10 +18,9 @@ const PrevTab = () => {
     wait(2000).then(() => [setRefreshing(false), loadPreviousRestaurants()]);
   }, [refreshing]);
 
-
   loadPreviousRestaurants = async () => {
     try {
-      let allPrevious = await fetchPreviousRestaurants();
+      let allPrevious = await fetchRestaurants('previous');
       setPrevious(allPrevious)
       setLoader(false)
       return allPrevious
@@ -41,38 +37,37 @@ const PrevTab = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Previous</Text>
       <ScrollView
-        // contentContainerStyle={styles.scrollView}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-      {isLoading ? <ActivityIndicator size='large' color='blue'/> : 
-        <>
+        {isLoading ? <ActivityIndicator size='large' color='blue'/> 
+          : 
           <ScrollView showsVerticalScrollIndicator={false}>
-          {previous.length === 0 
-            ? 
-            <View style={styles.noPrevious}>
-                <Text style={{fontSize: 25}}>You don't have any previous 🥺</Text>
+            {previous.length === 0 
+              ? 
+              <View style={styles.noPrevious}>
+                  <Text style={{fontSize: 25}}>You don't have any previous 🥺</Text>
               </View>
-            :
-            previous.reverse().map(restaurant => {
-              return <View style={styles.previous}>
-                        <View style={styles.name}>
-                          <Text style={styles.text}>{restaurant.name.length > 11 ? restaurant.name.slice(0, 11) + '...':restaurant.name}</Text>
+              :
+              previous.reverse().map(restaurant => {
+                return <View style={styles.previous}>
+                          <View style={styles.name}>
+                            <Text style={styles.text}>{restaurant.name.length > 11 ? restaurant.name.slice(0, 11) + '...':restaurant.name}</Text>
+                          </View>
+                          <View style={styles.info}> 
+                            <Text style={styles.text}>⭐️{restaurant.rating}</Text> 
+                          </View>
+                          <View style={styles.info}> 
+                            <Text style={styles.price}>{restaurant.price}</Text> 
+                          </View>
                         </View>
-                        <View style={styles.info}> 
-                          <Text style={styles.text}>⭐️{restaurant.rating}</Text> 
-                        </View>
-                        <View style={styles.info}> 
-                          <Text style={styles.price}>{restaurant.price}</Text> 
-                        </View>
-                      </View>
             })}
           </ScrollView>
-        </>
-      }
+        }
       </ScrollView>
     </View>
   )
 }
+
 const styles = StyleSheet.create({
   noPrevious: {
     paddingTop: 20,

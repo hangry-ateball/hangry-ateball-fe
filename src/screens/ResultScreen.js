@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'react-native-paper'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ActivityIndicator, Linking } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
+import { StyleSheet, View, Text, Image, TouchableOpacity, ActivityIndicator, Linking, Animated } from 'react-native'
 import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 
@@ -15,6 +17,7 @@ const ResultScreen = ({route}) => {
   const [isLoading, setLoader] = useState(true);
   const [restaurant, setRestaurant] = useState({});
   const [favorite, setFavorite] = useState(false);
+  const [shake] = useState(new Animated.Value(0));
 
   const checkFavoriteStatus = async () => {
     try {
@@ -48,7 +51,20 @@ const ResultScreen = ({route}) => {
       .catch(error => [setFetchFail(true), setLoader(false)])
   }
 
+  const startShake = () => {
+    Animated.sequence([
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: -20, duration: 25, useNativeDriver: true }),
+      Animated.timing(shake, { toValue: 0, duration: 25, useNativeDriver: true }),
+    ]).start();
+  }
+
   useEffect(() => {
+    startShake()
     fetchRestaurant(userLocation, restaurantType, cost)
     return () => {
       isCancelled.current = true;
@@ -75,7 +91,13 @@ const ResultScreen = ({route}) => {
 
   return (
     <View style={styles.resultContainer}>
-      {isLoading ? <ActivityIndicator size='large' color='blue'/> : fetchFailed ? 
+      {isLoading ? 
+      <Animated.Image source={require('../../assets/magic-loader-img.png')}
+        resizeMode='contain'
+        style={{ transform: [{translateX: shake}] }}
+      />
+      : 
+      fetchFailed ? 
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>😰Uh Oh😰</Text>
           <Text style={styles.errorText}>Something went wrong...</Text>

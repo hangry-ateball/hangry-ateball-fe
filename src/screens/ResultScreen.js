@@ -9,7 +9,6 @@ import { getContacts } from '../contactsHelper'
 const ResultScreen = ({route}) => {
   const { userLocation } = route.params;
   const { enteredAddress } = route.params;
-  console.log(enteredAddress, 'first')
   const { restaurantType } = route.params;
   const { price } = route.params;
   const { travelType } = route.params;
@@ -35,8 +34,6 @@ const ResultScreen = ({route}) => {
   }
 
   const fetchRestaurant = (userLocation, enteredAddress, restaurantType, price) => {
-    console.log(enteredAddress, price)
-
     let url;
     userLocation.latitude ?  
     url = `https://hangry-ateball-api.herokuapp.com/api/v1/recommendations?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`

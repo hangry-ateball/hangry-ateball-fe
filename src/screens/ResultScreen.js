@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Button } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-import { StyleSheet, View, Text, Image, TouchableOpacity, ActivityIndicator, Linking, Animated } from 'react-native'
+import { Button } from 'react-native-paper'
+import { StyleSheet, View, Text, Image, TouchableOpacity, Linking, Animated } from 'react-native'
 import { fetchRestaurants, addFavoriteRestaurant, unFavoriteRestaurant, updatePreviousRestaurants } from './asyncStorageHelper'
 import openMap from 'react-native-open-maps';
 

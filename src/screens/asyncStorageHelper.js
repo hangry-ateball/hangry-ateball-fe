@@ -8,7 +8,7 @@ export const fetchRestaurants = async (key) => {
     }
     return parseRestaurants(restaurants);
   } catch (error) {
-    console.log('Error fetching previous restaurants', error);
+    console.log('Error fetching restaurants', error);
   }
 }
 
@@ -33,6 +33,15 @@ export const updatePreviousRestaurants = async (restaurant) => {
     saveRestaurants(previous, 'previous');
   } catch (error) {
     console.log('Error fetching Previous', error);
+  }
+}
+
+export const clearAllPrevious = async () => {
+  try {
+    await AsyncStorage.removeItem('previous');
+  }
+  catch(error) {
+    console.log('Error removing previous', error);
   }
 }
 

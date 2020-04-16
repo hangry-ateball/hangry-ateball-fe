@@ -1,6 +1,11 @@
 # Hangry Ateball UI/UX
 ### Can’t figure out where to eat? Shake the magic “ateball” for a restaurant recommendation and let all your friends know where to meet you with a text notification.
 
+### Overview of Site:
+You are on your lunch break.  You've already eaten Chipotle 3 times this week.  You and your group of friends decide that it's time to change it up. Everyone is "down for anything" but nobody can make a concrete decision.  That's when you whip out your phone and open up Hangry Ateball.
+
+This app replicates the future-deciding 8 Ball by finding a nearby restaurant for you!  You can decide what kind of food(or leave it up to fate) as well as cost and if you want to walk or drive and the app will do the rest for you.  From the results screen, you can easily open maps to navigate to the restaurant or send the information to your friends via text with the click of a button.  It's munch time.  Where will you be?
+
 ### Contributors:
 - Caleb Haizlett 
 - Kim McCaskill
@@ -29,11 +34,6 @@
 - Learning React Native and technologies along with it like Expo and use of simulators
 - Using new testing framework, Cypress
 - COVID-19 impacts including remote work and affecting live restaurant data
-
-### Overview of Site:
-Can’t figure out where to eat? Shake the magic “ateball” for a restaurant recommendation and let all your friends know where to meet you with a text notification.
-
-more detail here
 
 Endpoints here:
 - Endpoint for a longitude and latitude:

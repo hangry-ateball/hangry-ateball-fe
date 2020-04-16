@@ -25,16 +25,15 @@ Endpoints here:
 
 
 #### Form:
-<img width="1139" alt="Screen Shot 2020-03-02 at 4 37 08 PM" src="https://user-images.githubusercontent.com/54483332/75728098-11212c00-5ca4-11ea-85c8-2f7c37aa160e.png">
+
 
 #### Result:
-<img width="1139" alt="Screen Shot 2020-03-02 at 4 37 40 PM" src="https://user-images.githubusercontent.com/54483332/75728121-2433fc00-5ca4-11ea-9803-69187ef64ddf.png">
+
 
 #### Previous results
-<img width="1139" alt="Screen Shot 2020-03-02 at 4 37 40 PM" src="https://user-images.githubusercontent.com/54483332/75728121-2433fc00-5ca4-11ea-9803-69187ef64ddf.png">
 
 #### Favorites
-<img width="1139" alt="Screen Shot 2020-03-02 at 4 37 40 PM" src="https://user-images.githubusercontent.com/54483332/75728121-2433fc00-5ca4-11ea-9803-69187ef64ddf.png">
+
 
 ### Technologies Used:
 - React Native

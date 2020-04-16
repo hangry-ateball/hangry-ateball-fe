@@ -1,14 +1,15 @@
 # Hangry Ateball UI/UX
 ### Can’t figure out where to eat? Shake the magic “ateball” for a restaurant recommendation and let all your friends know where to meet you with a text notification.
 
-### Overview of Site:
-You are on your lunch break.  You've already eaten Chipotle 3 times this week.  You and your group of friends decide that it's time to change it up. Everyone is "down for anything" but nobody can make a concrete decision.  That's when you whip out your phone and open up Hangry Ateball.
+### Overview of Application:
+You are on your lunch break.  You've already eaten Chipotle 3 times this week.  You and your group of friends decide that it's time to change it up.  Everyone is "down for anything" but nobody can make a concrete decision.  That's when you whip out your phone and open up Hangry Ateball.
 
-This app replicates the future-deciding 8 Ball by finding a nearby restaurant for you!  You can decide what kind of food(or leave it up to fate) as well as cost and if you want to walk or drive and the app will do the rest for you.  From the results screen, you can easily open maps to navigate to the restaurant or send the information to your friends via text with the click of a button.  It's munch time.  Where will you be?
+This app replicates the future-deciding 8 Ball by finding a nearby restaurant for you!  You can decide what kind of food (or leave it up to fate) as well as cost and if you want to walk or drive and the app will do the rest for you.  From the results screen, you can easily open maps to navigate to the restaurant or send the information to your friends via text with the click of a button.  It's munch time.  Where will you be?
 
 ### Contributors:
 - Caleb Haizlett 
 - Kim McCaskill
+- Back-End Team: github.com/hangry-ateball/hangry-ateball-be
 
 ### Learning Goals:
 - Ultimately, demonstrate knowledge we have gained throughout Turing
@@ -17,7 +18,7 @@ This app replicates the future-deciding 8 Ball by finding a nearby restaurant fo
 - Work closely with a back-end team to create a synchronous application
 - Create UI with an intentional and cohesive color palette
 - Use an agile process to turn well defined requirements into deployed and production ready software
-- Gain experience dividing applications into components and domains of responsibilities to facilitate multi-developer teams. 
+- Gain experience dividing applications into components and domains of responsibilities to facilitate multi-developer teams 
 - Explore and implement new concepts, patterns, or libraries that have not been explicitly taught while at Turing
 - Practice an advanced, professional git workflow 
 - Gain more experience using continuous integration tools to build and automate the deployment of features in various environments
@@ -45,10 +46,6 @@ Endpoints here:
   - Price: `&price=PRICE`
 
 ### Hangry Ateball
-
-
-
-
 
 #### Homepage:
 <img alt="homepage screenshot" width="40%" src="https://user-images.githubusercontent.com/19761687/79509423-b6942300-7ff8-11ea-90c1-f63d1679141b.png" />
@@ -84,5 +81,3 @@ Endpoints here:
 
 ### Systems/Practices
 - Agile
-
-## Setup

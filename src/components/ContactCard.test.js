@@ -1,10 +1,10 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import StartScreen from './StartScreen';
+import ContactCard from './ContactCard';
 describe('StartScreen', () => {
     describe('Rendering', () => {
         it('should match to snapshot', () => {
-           const wrapper = shallow(<StartScreen/>);
+           const wrapper = shallow(<ContactCard/>);
             expect(wrapper).toMatchSnapshot();
         });
     });

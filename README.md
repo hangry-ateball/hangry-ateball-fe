@@ -20,10 +20,15 @@
 - Focus on communication between front-end and back-end teams in order to complete and deploy features that have been outlined by the project spec
 
 #### Wins:
-- insert win
+
+- Achieved MVP with extensions before deadline
+- Successful workflow and communication between FE and BE teams
+- We made an app we would actually use!
   
 #### Challenges
-- insert challenge
+- Learning React Native and technologies along with it like Expo and use of simulators
+- Using new testing framework, Cypress
+- COVID-19 impacts including remote work and affecting live restaurant data
 
 ### Overview of Site:
 Can’t figure out where to eat? Shake the magic “ateball” for a restaurant recommendation and let all your friends know where to meet you with a text notification.

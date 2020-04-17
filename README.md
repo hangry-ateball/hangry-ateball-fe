@@ -7,9 +7,9 @@ You are on your lunch break.  You've already eaten Chipotle 3 times this week.  
 This app replicates the future-deciding 8 Ball by finding a nearby restaurant for you!  You can decide what kind of food (or leave it up to fate) as well as cost and if you want to walk or drive and the app will do the rest for you.  From the results screen, you can easily open maps to navigate to the restaurant or send the information to your friends via text with the click of a button.  It's munch time.  Where will you be?
 
 ### Contributors:
-- Caleb Haizlett 
-- Kim McCaskill
-- Back-End Team: https://github.com/hangry-ateball/hangry-ateball-be
+- [Caleb Haizlett](https://github.com/CHaiz15)
+- [Kim McCaskill](https://github.com/kimmccaskill)
+- [Back-End Team:](https://github.com/hangry-ateball/hangry-ateball-be)
 
 ### Learning Goals:
 - Ultimately, demonstrate knowledge we have gained throughout Turing

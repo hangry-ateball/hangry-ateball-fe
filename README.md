@@ -46,7 +46,7 @@ Endpoints here:
   - Price: `&price=PRICE`
 
 ### Hangry Ateball
-<img alt="homepage screenshot" width="40%" src="https://im4.ezgif.com/tmp/ezgif-4-a30855586948.gif" />
+<img alt="homepage screenshot" width="40%" src="https://user-images.githubusercontent.com/54483332/79593176-4dfc8300-8098-11ea-9d4c-51b95f6af645.gif" />
 
 #### Homepage:
 <img alt="homepage screenshot" width="40%" src="https://user-images.githubusercontent.com/19761687/79509423-b6942300-7ff8-11ea-90c1-f63d1679141b.png" />

@@ -9,7 +9,7 @@ This app replicates the future-deciding 8 Ball by finding a nearby restaurant fo
 ### Contributors:
 - Caleb Haizlett 
 - Kim McCaskill
-- Back-End Team: github.com/hangry-ateball/hangry-ateball-be
+- Back-End Team: https://github.com/hangry-ateball/hangry-ateball-be
 
 ### Learning Goals:
 - Ultimately, demonstrate knowledge we have gained throughout Turing

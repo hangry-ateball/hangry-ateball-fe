@@ -63,7 +63,7 @@ const PrevTab = () => {
               </View>
               :
               previous.reverse().map(restaurant => {
-                return <View style={styles.previous}>
+                return <View key={restaurant.name} style={styles.previous}>
                           <View style={styles.name}>
                             <Text style={styles.text}>{restaurant.name.length > 10 ? restaurant.name.slice(0, 10) + '...':restaurant.name}</Text>
                           </View>

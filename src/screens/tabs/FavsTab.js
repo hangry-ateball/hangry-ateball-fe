@@ -50,7 +50,7 @@ const FavTab = () => {
               </View>
               :
               favorites.reverse().map(restaurant => {
-                return <View testID='favoriteRestaurant' style={styles.favorites}>
+                return <View testID='favoriteRestaurant' key={restaurant.name} style={styles.favorites}>
                           <View style={styles.name}>
                             <Text style={styles.text}>{restaurant.name.length > 9 ? restaurant.name.slice(0, 9) + '...':restaurant.name}</Text>
                           </View>
